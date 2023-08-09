@@ -1,0 +1,32 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+local.settings.gradle
+
+# Ignore Gradle build output directory
+build
+
+### Frontend related stuff
+node_modules
+dist
+
+### Editor related stuff
+.idea
+*.iws
+*.iml
+*.ipr
+out
+!**/src/main/**/out
+!**/src/test/**/out
+
+.vscode
+
+### OpenApi
+**/.openapi-generator/*
+
+### Log files
+*.log
+
+### dev artifacts:
+*.db
+**/images
+!**/resources/mock/images

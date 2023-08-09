@@ -1,0 +1,100 @@
+//file:noinspection GroovyAssignabilityCheck
+plugins {
+  id 'java'
+  id 'org.springframework.boot' version '3.1.1'
+  id 'io.spring.dependency-management' version '1.1.0'
+  id "org.openapi.generator" version "6.2.1"
+}
+
+group = 'hu.aestallon.giannitsa'
+version = '0.0.1-SNAPSHOT'
+
+java {
+  sourceCompatibility = '17'
+}
+
+configurations {
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+  implementation 'io.swagger.core.v3:swagger-annotations:2.2.6'
+  implementation 'javax.annotation:javax.annotation-api:1.3.2'
+  implementation 'javax.validation:validation-api:2.0.1.Final'
+  implementation 'javax.servlet:javax.servlet-api:4.0.1'
+  implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.1'
+  implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+  implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
+  implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
+
+  compileOnly 'org.projectlombok:lombok'
+
+  runtimeOnly 'com.h2database:h2'
+  runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+
+  annotationProcessor 'org.projectlombok:lombok'
+
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.named('test') {
+  useJUnitPlatform()
+}
+
+def processFrontendResourcesTask = 'processFrontendResources'
+
+tasks.register(processFrontendResourcesTask, Copy) {
+  def frontendBuildDir = file("${project(':giannitsa-ui-vue').buildDir}/../dist")
+  def appResourcesDir = file("${project.buildDir}/resources/main/static")
+
+  group 'frontend'
+  description 'process frontend resources'
+  dependsOn project(':giannitsa-ui-vue').tasks.named('assembleFrontend')
+
+  println "copying frontend resources from [ $frontendBuildDir ] to [ $appResourcesDir ]"
+
+  from frontendBuildDir
+  into appResourcesDir
+}
+
+tasks.named('processResources') {
+  dependsOn tasks.named(processFrontendResourcesTask)
+}
+
+openApiGenerate {
+  generatorName = "spring"
+  inputSpec = "$rootDir/spec/giannitsa-api.yaml".toString()
+  outputDir = "$rootDir/app".toString()
+  apiPackage = "hu.aestallon.giannitsa.app.rest.api"
+  modelPackage = "hu.aestallon.giannitsa.app.rest.model"
+  configOptions = [
+      dateLibrary            : "java8-localdatetime",
+      delegatePattern        : "true",
+      fullJavaUtil           : "true",
+      library                : "spring-boot",
+      documentationProvied   : "none",
+      useOptional            : "true",
+      useSwaggerUI           : "false",
+      hideGenerationTimestamp: "true"
+  ]
+  globalProperties = [
+      apis  : "",
+      models: ""
+  ]
+  supportingFilesConstrainedTo = [
+      "ApiUtil.java",
+      "RFC3339DateFormat.java"
+  ]
+}

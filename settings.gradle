@@ -1,0 +1,12 @@
+rootProject.name = 'app-giannitsa'
+
+include 'giannitsa-app-server'
+project (':giannitsa-app-server').projectDir = file('app')
+
+include 'giannitsa-ui-vue'
+project(':giannitsa-ui-vue').projectDir = file('vue')
+
+def localSettings = file('local.settings.gradle')
+if (localSettings.exists()) {
+  apply from:localSettings
+}
