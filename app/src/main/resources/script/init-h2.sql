@@ -16,6 +16,7 @@ values ('dev', '$2a$10$H01N158v4Ac/Tj5h.J3JHOQELFjQ1qXAXDtahZBMFdk/UtG6eVNTy', '
 
 alter table if exists paragraph
     drop constraint if exists fk_paragraph_article;
+
 alter table if exists article_tag
     drop constraint if exists fk_tag_article;
 

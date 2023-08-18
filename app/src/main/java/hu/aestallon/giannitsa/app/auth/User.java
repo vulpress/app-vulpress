@@ -41,15 +41,15 @@ import java.util.Collections;
  * @see org.springframework.security.core.userdetails.UserDetailsService
  * @since 2023-07-02
  */
-@Table("USER_ACCOUNT")
+@Table("user_account")
 @Data
 @AllArgsConstructor
 public class User implements UserDetails {
   private @Id                        Long    id;
   private final                      String  username;
-  private final @Column("USER_PW")   String  password;
-  private final @Column("USER_ROLE") String  role;
-  private final @Column("INACTIVE")  boolean inactive;
+  private final @Column("user_pw")   String  password;
+  private final @Column("user_role") String  role;
+  private final @Column("inactive")  boolean inactive;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
