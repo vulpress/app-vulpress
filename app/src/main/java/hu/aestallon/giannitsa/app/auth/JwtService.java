@@ -20,7 +20,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +33,9 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+
+  private static final String BEARER_PREFIX = "Bearer ";
+  private static final String AUTH_HEADER   = "Authorization";
 
   @Value("${jwt.secret:secret}")
   private String secretKey;
@@ -139,25 +141,10 @@ public class JwtService {
    * or null if there wasn't any
    */
   public String getJwtTokenFromRequest(HttpServletRequest request) {
-    String jwt = null;
-
-    final String authorizationHeader = request.getHeader("Authorization");
-    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-      jwt = authorizationHeader.substring(7);
-    } else {
-      // allow for the JWT token to travel as a cookie:
-      Cookie[] cookies = request.getCookies();
-      if (cookies != null) {
-        for (int i = 0; i < cookies.length; i++) {
-          Cookie cookie = cookies[i];
-          if (cookie != null && jwtCookie.equals(cookie.getName())) {
-            jwt = cookie.getValue();
-            break;
-          }
-        }
-      }
-    }
-    return jwt;
+    final String authorizationHeader = request.getHeader(AUTH_HEADER);
+    return (authorizationHeader != null && authorizationHeader.startsWith(BEARER_PREFIX))
+        ? authorizationHeader.substring(BEARER_PREFIX.length())
+        : null;
   }
 
 }

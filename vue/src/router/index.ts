@@ -15,28 +15,52 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router'
+import { Router, createRouter, createWebHistory } from "vue-router";
+import { authService } from "@/services";
+
+function redirectFromRoot(): string {
+  let jwtToken: string | null = localStorage.getItem("jwtToken");
+  return jwtToken ? "Main" : "Login";
+}
 
 const routes = [
   {
-    path: '/',
-    component: () => import('@/layouts/default/Default.vue'),
+    path: "/",
+    name: "Home",
+    component: () => import("@/views/Home.vue"),
+    redirect: redirectFromRoot,
     children: [
       {
-        path: '',
-        name: 'Home',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        path: "login",
+        name: "Login",
+        component: () => import("@/views/Login.vue"),
+      },
+      {
+        path: "main",
+        name: "Main",
+        component: () => import("@/views/Main.vue"),
+        meta: {
+          requiresAuth: true,
+        },
       },
     ],
   },
-]
+];
 
-const router = createRouter({
+const router: Router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-})
+});
 
-export default router
+router.beforeEach(async (to, from) => {
+  // if we are to navigate to a marked route or any of its descendants,
+  if (to.matched.some((r) => r.meta.requiresAuth)) {
+    // redirect to /login if there is no token, or it has expired:
+    if (!(await authService.isAuthenticated())) {
+      localStorage.clear();
+      return { name: "login" };
+    }
+  }
+});
+
+export default router;
