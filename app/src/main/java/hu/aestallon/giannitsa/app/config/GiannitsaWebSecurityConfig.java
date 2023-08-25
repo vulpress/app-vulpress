@@ -105,15 +105,15 @@ public class GiannitsaWebSecurityConfig implements WebSecurityCustomizer {
         .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(ex -> ex
             .accessDeniedHandler(this::handleException)
-            .addObjectPostProcessor(
-                new ObjectPostProcessor<ExceptionTranslationFilter>() {
+            .addObjectPostProcessor(new ObjectPostProcessor<ExceptionTranslationFilter>() {
 
-                  @Override
-                  public <O extends ExceptionTranslationFilter> O postProcess(O object) {
-                    object.setAuthenticationTrustResolver(new RejectingAuthTrustResolver());
-                    return object;
-                  }
-                }))
+              @Override
+              public <O extends ExceptionTranslationFilter> O postProcess(O object) {
+                object.setAuthenticationTrustResolver(new RejectingAuthTrustResolver());
+                return object;
+              }
+
+            }))
         .build();
   }
 

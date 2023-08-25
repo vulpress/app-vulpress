@@ -1,3 +1,5 @@
+drop all objects;
+
 drop table if exists account_user;
 create table if not exists account_user
 (
@@ -13,6 +15,7 @@ values ('admin', '$2a$10$H01N158v4Ac/Tj5h.J3JHOQELFjQ1qXAXDtahZBMFdk/UtG6eVNTy',
 
 insert into account_user (username, user_pw, user_role)
 values ('dev', '$2a$10$H01N158v4Ac/Tj5h.J3JHOQELFjQ1qXAXDtahZBMFdk/UtG6eVNTy', 'PLAIN'); -- admin
+
 
 alter table if exists paragraph
     drop constraint if exists fk_paragraph_article;
@@ -43,9 +46,7 @@ create table if not exists paragraph
     content     text    not null default '',     -- the text content for TITLE and TEXT types
     image       uuid                             -- the image UUID for ILLUSTRATION type
 );
-alter table paragraph
-    add constraint fk_paragraph_article
-        foreign key (article) references article (id);
+alter table paragraph add constraint fk_paragraph_article foreign key (article) references article (id);
 
 drop table if exists article_tag;
 create table if not exists article_tag
