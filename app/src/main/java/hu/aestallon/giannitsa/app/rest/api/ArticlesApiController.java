@@ -1,7 +1,6 @@
 package hu.aestallon.giannitsa.app.rest.api;
 
-import hu.aestallon.giannitsa.app.rest.model.AuthenticationRequest;
-import hu.aestallon.giannitsa.app.rest.model.AuthenticationResponse;
+import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +28,16 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Controller
 @RequestMapping("${openapi.giannitsaWebAppBFF.base-path:}")
-public class AuthApiController implements AuthApi {
+public class ArticlesApiController implements ArticlesApi {
 
-    private final AuthApiDelegate delegate;
+    private final ArticlesApiDelegate delegate;
 
-    public AuthApiController(@Autowired(required = false) AuthApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new AuthApiDelegate() {});
+    public ArticlesApiController(@Autowired(required = false) ArticlesApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new ArticlesApiDelegate() {});
     }
 
     @Override
-    public AuthApiDelegate getDelegate() {
+    public ArticlesApiDelegate getDelegate() {
         return delegate;
     }
 

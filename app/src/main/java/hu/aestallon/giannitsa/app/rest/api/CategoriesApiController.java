@@ -1,7 +1,9 @@
 package hu.aestallon.giannitsa.app.rest.api;
 
-import hu.aestallon.giannitsa.app.rest.model.AuthenticationRequest;
-import hu.aestallon.giannitsa.app.rest.model.AuthenticationResponse;
+import hu.aestallon.giannitsa.app.rest.model.ArticlePreview;
+import hu.aestallon.giannitsa.app.rest.model.Category;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDate;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +31,16 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Controller
 @RequestMapping("${openapi.giannitsaWebAppBFF.base-path:}")
-public class AuthApiController implements AuthApi {
+public class CategoriesApiController implements CategoriesApi {
 
-    private final AuthApiDelegate delegate;
+    private final CategoriesApiDelegate delegate;
 
-    public AuthApiController(@Autowired(required = false) AuthApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new AuthApiDelegate() {});
+    public CategoriesApiController(@Autowired(required = false) CategoriesApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new CategoriesApiDelegate() {});
     }
 
     @Override
-    public AuthApiDelegate getDelegate() {
+    public CategoriesApiDelegate getDelegate() {
         return delegate;
     }
 

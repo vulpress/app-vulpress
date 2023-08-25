@@ -15,54 +15,54 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * AuthenticationRequest
+ * Category
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class AuthenticationRequest {
+public class Category {
 
-  @JsonProperty("username")
-  private String username;
+  @JsonProperty("code")
+  private String code;
 
-  @JsonProperty("password")
-  private String password;
+  @JsonProperty("displayValue")
+  private String displayValue;
 
-  public AuthenticationRequest username(String username) {
-    this.username = username;
+  public Category code(String code) {
+    this.code = code;
     return this;
   }
 
   /**
-   * Get username
-   * @return username
+   * URL-safe unique identifier. 
+   * @return code
   */
   @NotNull 
-  @Schema(name = "username", required = true)
-  public String getUsername() {
-    return username;
+  @Schema(name = "code", example = "homilies", description = "URL-safe unique identifier. ", required = true)
+  public String getCode() {
+    return code;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setCode(String code) {
+    this.code = code;
   }
 
-  public AuthenticationRequest password(String password) {
-    this.password = password;
+  public Category displayValue(String displayValue) {
+    this.displayValue = displayValue;
     return this;
   }
 
   /**
-   * Get password
-   * @return password
+   * Get displayValue
+   * @return displayValue
   */
   @NotNull 
-  @Schema(name = "password", required = true)
-  public String getPassword() {
-    return password;
+  @Schema(name = "displayValue", example = "Homilies", required = true)
+  public String getDisplayValue() {
+    return displayValue;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setDisplayValue(String displayValue) {
+    this.displayValue = displayValue;
   }
 
   @Override
@@ -73,22 +73,22 @@ public class AuthenticationRequest {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AuthenticationRequest authenticationRequest = (AuthenticationRequest) o;
-    return Objects.equals(this.username, authenticationRequest.username) &&
-        Objects.equals(this.password, authenticationRequest.password);
+    Category category = (Category) o;
+    return Objects.equals(this.code, category.code) &&
+        Objects.equals(this.displayValue, category.displayValue);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, password);
+    return Objects.hash(code, displayValue);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AuthenticationRequest {\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("class Category {\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    displayValue: ").append(toIndentedString(displayValue)).append("\n");
     sb.append("}");
     return sb.toString();
   }

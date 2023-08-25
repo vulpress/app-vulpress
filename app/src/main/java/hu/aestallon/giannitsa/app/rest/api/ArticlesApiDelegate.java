@@ -1,7 +1,6 @@
 package hu.aestallon.giannitsa.app.rest.api;
 
-import hu.aestallon.giannitsa.app.rest.model.AuthenticationRequest;
-import hu.aestallon.giannitsa.app.rest.model.AuthenticationResponse;
+import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,42 +13,29 @@ import java.util.Optional;
 import javax.annotation.Generated;
 
 /**
- * A delegate to be called by the {@link AuthApiController}}.
+ * A delegate to be called by the {@link ArticlesApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public interface AuthApiDelegate {
+public interface ArticlesApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
     /**
-     * GET /auth : Checks for authentication.
-     * Pings the server with the authentication token included as a bearer token to check for its validity. 
+     * GET /articles/{article} : Load the contents of an article
+     * ... 
      *
+     * @param article  (required)
      * @return Ok (status code 200)
-     *         or Unauthorized (status code 403)
-     * @see AuthApi#isAuthenticated
+     * @see ArticlesApi#getArticle
      */
-    default ResponseEntity<Void> isAuthenticated() {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-    /**
-     * POST /auth/login : Attempts authentication.
-     * Submits an username-password authentication request for login purposes. 
-     *
-     * @param authenticationRequest  (required)
-     * @return Ok (status code 200)
-     * @see AuthApi#login
-     */
-    default ResponseEntity<AuthenticationResponse> login(AuthenticationRequest authenticationRequest) {
+    default ResponseEntity<ArticleDetail> getArticle(String article) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"token\" : \"token\" }";
+                    String exampleString = "{ \"code\" : \"code\", \"id\" : 0, \"title\" : \"title\", \"paragraphs\" : [ { \"image\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"text\" : \"text\", \"title\" : \"title\" }, { \"image\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"text\" : \"text\", \"title\" : \"title\" } ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
