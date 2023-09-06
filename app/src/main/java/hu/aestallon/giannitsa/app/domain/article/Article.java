@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package hu.aestallon.giannitsa.app.article;
+package hu.aestallon.giannitsa.app.domain.article;
 
 import hu.aestallon.giannitsa.app.auth.User;
 import org.springframework.data.annotation.Id;
@@ -32,6 +32,7 @@ import java.util.UUID;
 public record Article(
     @Id Long id,
     @Column("title") String title,
+    @Column("norm_title") String normalisedTitle,
     @Column("author_name") String authorName,
     @Column("author_id") AggregateReference<User, Long> author,
     @Column("description") String description,
@@ -53,10 +54,12 @@ public record Article(
   @Table("article_tag")
   public record ArticleTag(@Column("tag_") String tag) {}
 
-  public Article(String title, String authorName, AggregateReference<User, Long> author,
+  public Article(String normalisedTitle, String title, String authorName,
+                 AggregateReference<User, Long> author,
                  String description, LocalDateTime createdAt, LocalDate issueDate,
                  List<Paragraph> paragraphs, Set<ArticleTag> tags) {
-    this(null, title, authorName, author, description, createdAt, issueDate, paragraphs, tags);
+    this(null, normalisedTitle, title, authorName, author, description, createdAt, issueDate,
+        paragraphs, tags);
   }
 
 }

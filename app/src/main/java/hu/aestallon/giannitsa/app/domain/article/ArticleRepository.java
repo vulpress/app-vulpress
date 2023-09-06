@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package hu.aestallon.giannitsa.app.repository;
+package hu.aestallon.giannitsa.app.domain.article;
 
-import hu.aestallon.giannitsa.app.article.Article;
+import hu.aestallon.giannitsa.app.domain.article.Article;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -28,4 +28,6 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
 
   @Query("select distinct at.tag_ from article_tag at")
   Set<String> findAllTags();
+
+  // Iterable<Article> findArticlesOfCategory();
 }
