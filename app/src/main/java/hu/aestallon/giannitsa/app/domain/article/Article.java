@@ -17,6 +17,7 @@
 package hu.aestallon.giannitsa.app.domain.article;
 
 import hu.aestallon.giannitsa.app.auth.User;
+import hu.aestallon.giannitsa.app.domain.category.ContentCategory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.Column;
@@ -31,15 +32,24 @@ import java.util.UUID;
 @Table("article")
 public record Article(
     @Id Long id,
-    @Column("title") String title,
     @Column("norm_title") String normalisedTitle,
-    @Column("author_name") String authorName,
+    @Column("title") String title,
     @Column("author_id") AggregateReference<User, Long> author,
+    @Column("author_name") String authorName,
+
+    @Column("content_category") AggregateReference<ContentCategory, Long> contentCategory,
     @Column("description") String description,
     @Column("created_at") LocalDateTime createdAt,
     @Column("issue_date") LocalDate issueDate,
     List<Paragraph> paragraphs,
     Set<ArticleTag> tags) {
+  public Article(String normalisedTitle, String title, AggregateReference<User, Long> author,
+                 String authorName, AggregateReference<ContentCategory, Long> contentCategory,
+                 String description, LocalDateTime createdAt, LocalDate issueDate,
+                 List<Paragraph> paragraphs, Set<ArticleTag> tags) {
+    this(null, normalisedTitle, title, author, authorName, contentCategory, description, createdAt,
+        issueDate, paragraphs, tags);
+  }
 
   public enum ParagraphType {
     TITLE, ILLUSTRATION, TEXT
@@ -53,13 +63,5 @@ public record Article(
 
   @Table("article_tag")
   public record ArticleTag(@Column("tag_") String tag) {}
-
-  public Article(String normalisedTitle, String title, String authorName,
-                 AggregateReference<User, Long> author,
-                 String description, LocalDateTime createdAt, LocalDate issueDate,
-                 List<Paragraph> paragraphs, Set<ArticleTag> tags) {
-    this(null, normalisedTitle, title, authorName, author, description, createdAt, issueDate,
-        paragraphs, tags);
-  }
 
 }

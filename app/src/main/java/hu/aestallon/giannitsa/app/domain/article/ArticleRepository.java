@@ -16,9 +16,10 @@
 
 package hu.aestallon.giannitsa.app.domain.article;
 
-import hu.aestallon.giannitsa.app.domain.article.Article;
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Set;
@@ -29,5 +30,14 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
   @Query("select distinct at.tag_ from article_tag at")
   Set<String> findAllTags();
 
-  // Iterable<Article> findArticlesOfCategory();
+  @Query( // TODO: Only select norm_title, title, description and imageUuid
+      """
+          select a.* from article a 
+          join content_category c on c.id = a.content_category 
+          where c.norm_title = :category""")
+  Iterable<Article> findArticlesOfCategory(String category);
+
+  @Modifying
+  @Query("update article a set a.content_category = :categoryId where a.norm_title = :normTitle")
+  boolean moveArticle(@Param("normTitle") String normTitle, @Param("category") Long categoryId);
 }
