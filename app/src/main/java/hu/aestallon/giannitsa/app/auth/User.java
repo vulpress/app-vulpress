@@ -17,8 +17,6 @@
 package hu.aestallon.giannitsa.app.auth;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -29,31 +27,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-/**
- * The primary (and only) User implementation.
- *
- * <p>
- * Instances of this class represent users of the application. This class extends
- * {@link UserDetails} to integrate with SpringBoot's user management and authentication systems.
- *
- * @author Szabolcs Bazil Papp
- * @see UserDetails
- * @see org.springframework.security.core.userdetails.UserDetailsService
- * @since 2023-07-02
- */
 @Table("user_account")
-@Data
-@AllArgsConstructor
-public class User implements UserDetails {
-  private @Id                        Long    id;
-  private final                      String  username;
-  private final @Column("user_pw")   String  password;
-  private final @Column("user_role") String  role;
-  private final @Column("inactive")  boolean inactive;
+public record User(
+    @Id Long id,
+    @Column("username") String username,
+    @Column("user_pw") String password,
+    @Column("user_role") String role,
+    @Column("inactive") boolean inactive
+) implements UserDetails {
+
+  public User(String username, String password, String role, boolean inactive) {
+    this(null, username, password, role, inactive);
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Collections.singleton(new SimpleGrantedAuthority(role));
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
+  }
+
+  @Override
+  public String getUsername() {
+    return username;
   }
 
   @Override

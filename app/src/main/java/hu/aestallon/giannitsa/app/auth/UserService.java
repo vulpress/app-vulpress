@@ -16,7 +16,6 @@
 
 package hu.aestallon.giannitsa.app.auth;
 
-import hu.aestallon.giannitsa.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,6 +48,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
+  private static final String PLAIN = "PLAIN";
+  private static final String ADMIN = "ADMIN";
+
   private final UserRepository userRepository;
 
   @Override
@@ -73,9 +75,8 @@ public class UserService implements UserDetailsService {
       return null;
     }
 
-    Object principal = token.getPrincipal();
-    System.out.println("Principal+ " + principal);
-    if (!(principal instanceof User user)) {
+    final Object principal = token.getPrincipal();
+    if (!(principal instanceof final User user)) {
       return null;
     }
     return user;
@@ -90,7 +91,7 @@ public class UserService implements UserDetailsService {
    */
   public boolean isCurrentUserAdmin() {
     final User user = currentUser();
-    return user != null && "ADMIN".equalsIgnoreCase(user.getRole());
+    return user != null && ADMIN.equalsIgnoreCase(user.role());
   }
 
 }
