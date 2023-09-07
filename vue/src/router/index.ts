@@ -15,30 +15,29 @@
  */
 
 // Composables
-import { Router, createRouter, createWebHistory } from "vue-router";
-import { authService } from "@/services";
+import { createRouter, createWebHistory, Router } from 'vue-router';
 
 function redirectFromRoot(): string {
-  let jwtToken: string | null = localStorage.getItem("jwtToken");
-  return jwtToken ? "Main" : "Login";
+  let jwtToken: string | null = localStorage.getItem('jwtToken');
+  return jwtToken ? 'Main' : 'Login';
 }
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: () => import("@/views/Home.vue"),
-    redirect: redirectFromRoot,
+    path: '/',
+    name: 'Home',
+    component: () => import('@/views/Home.vue'),
+    // redirect: redirectFromRoot,
     children: [
       {
-        path: "login",
-        name: "Login",
-        component: () => import("@/views/Login.vue"),
+        path: 'login',
+        name: 'login',
+        component: () => import('@/views/Login.vue'),
       },
       {
-        path: "main",
-        name: "Main",
-        component: () => import("@/views/Main.vue"),
+        path: 'main',
+        name: 'main',
+        component: () => import('@/views/Main.vue'),
         meta: {
           requiresAuth: true,
         },
@@ -52,15 +51,15 @@ const router: Router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to, from) => {
-  // if we are to navigate to a marked route or any of its descendants,
-  if (to.matched.some((r) => r.meta.requiresAuth)) {
-    // redirect to /login if there is no token, or it has expired:
-    if (!(await authService.isAuthenticated())) {
-      localStorage.clear();
-      return { name: "login" };
-    }
-  }
-});
+// router.beforeEach(async (to, from) => {
+//   // if we are to navigate to a marked route or any of its descendants,
+//   if (to.matched.some((r) => r.meta.requiresAuth)) {
+//     // redirect to /login if there is no token, or it has expired:
+//     if (!(await authService.isAuthenticated())) {
+//       localStorage.clear();
+//       return { name: 'Login' };
+//     }
+//   }
+// });
 
 export default router;

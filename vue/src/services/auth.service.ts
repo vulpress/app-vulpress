@@ -1,10 +1,11 @@
-import { AuthApi, AuthenticationRequest } from "@/api/giannitsa";
+import { AuthApi, AuthenticationRequest } from '@/api/giannitsa';
 
 export default class AuthService {
-  constructor(private authApi: AuthApi) {}
+  constructor(private authApi: AuthApi) {
+  }
 
   async isAuthenticated(): Promise<boolean> {
-    const jwtToken = localStorage.getItem("jwtToken");
+    const jwtToken = localStorage.getItem('jwtToken');
     if (!jwtToken) {
       return false;
     }
@@ -19,13 +20,16 @@ export default class AuthService {
     return await this.authApi
       .login(credentials)
       .then((success) => {
-        localStorage.setItem("jwtToken", success.data.token ?? "");
+        localStorage.setItem('jwtToken', success.data.token ?? '');
         return true;
       })
-      .catch((error) => false);
+      .catch((error) => {
+        console.log(error);
+        return false;
+      });
   }
 
   logout(): void {
-    localStorage.removeItem("jwtToken");
+    localStorage.removeItem('jwtToken');
   }
 }
