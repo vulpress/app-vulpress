@@ -16,7 +16,6 @@
 
 package hu.aestallon.giannitsa.app.auth;
 
-import hu.aestallon.giannitsa.app.repository.UserRepository;
 import hu.aestallon.giannitsa.app.rest.model.AuthenticationRequest;
 import hu.aestallon.giannitsa.app.rest.model.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;

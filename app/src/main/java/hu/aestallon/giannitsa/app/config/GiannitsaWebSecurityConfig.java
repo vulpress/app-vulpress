@@ -33,7 +33,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -45,6 +44,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.IOException;
 
@@ -72,7 +72,7 @@ import java.io.IOException;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class GiannitsaWebSecurityConfig implements WebSecurityCustomizer {
+public class GiannitsaWebSecurityConfig {
 
   private final UserService userService;
   private final JwtRequestFilter jwtRequestFilter;
@@ -92,6 +92,7 @@ public class GiannitsaWebSecurityConfig implements WebSecurityCustomizer {
                 "/vendor.js.map",
                 "/main.js.map",
                 "/index.html",
+                "/assets/**",
                 "/",
                 "/login", "/h2-console/**").permitAll()
             .anyRequest().authenticated())
@@ -122,11 +123,9 @@ public class GiannitsaWebSecurityConfig implements WebSecurityCustomizer {
     res.setStatus(HttpStatus.FORBIDDEN.value());
   }
 
-  @Override
-  public void customize(WebSecurity web) {
-    web.ignoring().requestMatchers("/*.js", "/*.ts", "/index.html",
-        "/favicon.ico", "/favicon.png", "/assets/**", "webcomponents/**", "/runtime.js",
-        "/polyfills.js", "/login", "/h2-console");
+  @Bean
+  WebSecurityCustomizer webSecurityCustomizer() {
+    return web -> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
   }
 
   @Bean

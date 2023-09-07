@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package hu.aestallon.giannitsa.app.repository;
+package hu.aestallon.giannitsa.app.config;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration;
-import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -39,7 +38,6 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 @Configuration
-@EnableJdbcRepositories
 @Profile("h2")
 @EnableConfigurationProperties(H2DatabaseConfig.DatasourceSettings.class)
 public class H2DatabaseConfig extends AbstractJdbcConfiguration {
