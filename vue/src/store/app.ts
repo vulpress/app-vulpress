@@ -15,10 +15,88 @@
  */
 
 // Utilities
-import { defineStore } from 'pinia'
+import { ArticleDetail, ArticlePreview, Category } from '@/api/giannitsa';
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
-export const useAppStore = defineStore('app', {
-  state: () => ({
-    //
-  }),
-})
+export const useAppStore = defineStore('app', () => {
+  //#region mockCategories
+  const mockCategories: Category[] = [
+    {
+      code: 'category-1',
+      title: 'Category 1',
+      description: 'Category 1 Description',
+    },
+    {
+      code: 'category-2',
+      title: 'Category 2',
+      description: 'Category 2 Description',
+    },
+    {
+      code: 'category-3',
+      title: 'Category 3',
+      description: 'Category 3 Description',
+    },
+    {
+      code: 'category-4',
+      title: 'Category 4',
+      description: 'Category 4 Description',
+    },
+  ];
+  //#endregion
+
+  const categories = ref<Category[]>(mockCategories);
+  const articles = ref<ArticlePreview[]>([]);
+
+  const currentCategory = ref<Category | undefined>();
+
+  function fetchArticles(category: string): void {
+    articles.value = [
+      {
+        code: `${category}-article-1`,
+        title: `${category} Article 1`,
+        description: `${category} Article 1 Description`,
+      },
+      {
+        code: `${category}-article-2`,
+        title: `${category} Article 2`,
+        description: `${category} Article 2 Description`,
+      },
+      {
+        code: `${category}-article-3`,
+        title: `${category} Article 3`,
+        description: `${category} Article 3 Description`,
+      },
+      {
+        code: `${category}-article-4`,
+        title: `${category} Article 4`,
+        description: `${category} Article 4 Description`,
+      },
+    ];
+    currentCategory.value = categories.value.find((c) => c.code === category);
+  }
+
+  function loadArticle(category: string, article: string): ArticleDetail | undefined {
+    return {
+      code: article,
+      id: 1,
+      title: `${article} title`,
+      paragraphs: [
+        {
+          text: 'Lorem ipsum dolor sit amet',
+        },
+        {
+          text: 'Lorem ipsum dolor sit amet',
+        },
+        {
+          text: 'Lorem ipsum dolor sit amet',
+        },
+        {
+          text: 'Lorem ipsum dolor sit amet',
+        },
+      ],
+    };
+  }
+
+  return { categories, currentCategory, articles, fetchArticles, loadArticle };
+});

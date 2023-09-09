@@ -1,0 +1,52 @@
+/* Colours */
+:root {
+    --gr-primary: #492B7C;
+    --gr-text: #301551;
+}
+
+.border-strong {
+    border: 0.3rem solid var(--gr-primary) !important;
+}
+
+.view-title {
+    display: flex;
+    color: var(--gr-text);
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    width: 100vw;
+    justify-content: center;
+}
+
+.ui-action-container {
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    justify-content: center;
+}
+
+.ui-action {
+    text-transform: unset;
+}
+.card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.category-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.header-spacer {
+    display: flex;
+    flex: 1;
+    min-width: 48px;
+}

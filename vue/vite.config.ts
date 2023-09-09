@@ -26,7 +26,7 @@ import { fileURLToPath, URL } from 'node:url';
 export default defineConfig({
   build: {
     //emptyOutDir: true,
-    outDir: '../app/src/main/resources/static',
+    // outDir: '../app/src/main/resources/static',
   },
   plugins: [
     vue({
@@ -45,15 +45,7 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-    extensions: [
-      '.js',
-      '.json',
-      '.jsx',
-      '.mjs',
-      '.ts',
-      '.tsx',
-      '.vue',
-    ],
+    extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
   },
   server: {
     port: 3000,

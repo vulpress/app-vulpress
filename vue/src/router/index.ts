@@ -18,8 +18,9 @@
 import { createRouter, createWebHistory, Router } from 'vue-router';
 
 function redirectFromRoot(): string {
-  let jwtToken: string | null = localStorage.getItem('jwtToken');
-  return jwtToken ? 'Main' : 'Login';
+  //let jwtToken: string | null = localStorage.getItem('jwtToken');
+  //return jwtToken ? 'Main' : 'Login';
+  return 'main';
 }
 
 const routes = [
@@ -27,20 +28,24 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import('@/views/Home.vue'),
-    // redirect: redirectFromRoot,
+    redirect: redirectFromRoot,
     children: [
-      {
-        path: 'login',
-        name: 'login',
-        component: () => import('@/views/Login.vue'),
-      },
       {
         path: 'main',
         name: 'main',
         component: () => import('@/views/Main.vue'),
-        meta: {
-          requiresAuth: true,
-        },
+      },
+      {
+        path: ':category',
+        name: 'category',
+        component: () => import('@/views/Category.vue'),
+        props: true,
+      },
+      {
+        path: ':category/:article',
+        name: 'article',
+        component: () => import('@/views/Article.vue'),
+        props: true,
       },
     ],
   },

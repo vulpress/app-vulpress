@@ -278,17 +278,16 @@ components:
           description: |
             URL-safe unique identifier.
           example: homilies
-        displayValue:
+        title:
           type: string
           example: Homilies
+        description:
+          type: string
       required: [ code, displayValue ]
 
     ArticlePreview:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
         code:
           type: string
           description: |
