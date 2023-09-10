@@ -15,65 +15,44 @@
  */
 
 // Utilities
-import { ArticleDetail, ArticlePreview, Category } from '@/api/giannitsa';
+import { ApiError, AppBarModel, ArticleDetail, ArticlePreview, Category } from '@/api/giannitsa';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { articleService, viewService } from '@/services';
 
 export const useAppStore = defineStore('app', () => {
-  //#region mockCategories
-  const mockCategories: Category[] = [
-    {
-      code: 'category-1',
-      title: 'Category 1',
-      description: 'Category 1 Description',
-    },
-    {
-      code: 'category-2',
-      title: 'Category 2',
-      description: 'Category 2 Description',
-    },
-    {
-      code: 'category-3',
-      title: 'Category 3',
-      description: 'Category 3 Description',
-    },
-    {
-      code: 'category-4',
-      title: 'Category 4',
-      description: 'Category 4 Description',
-    },
-  ];
-  //#endregion
-
-  const categories = ref<Category[]>(mockCategories);
+  const appBarModel = ref<AppBarModel | undefined>();
+  const categories = ref<Category[]>([]);
   const articles = ref<ArticlePreview[]>([]);
-
   const currentCategory = ref<Category | undefined>();
 
-  function fetchArticles(category: string): void {
-    articles.value = [
-      {
-        code: `${category}-article-1`,
-        title: `${category} Article 1`,
-        description: `${category} Article 1 Description`,
-      },
-      {
-        code: `${category}-article-2`,
-        title: `${category} Article 2`,
-        description: `${category} Article 2 Description`,
-      },
-      {
-        code: `${category}-article-3`,
-        title: `${category} Article 3`,
-        description: `${category} Article 3 Description`,
-      },
-      {
-        code: `${category}-article-4`,
-        title: `${category} Article 4`,
-        description: `${category} Article 4 Description`,
-      },
-    ];
-    currentCategory.value = categories.value.find((c) => c.code === category);
+  async function appBarModelChanged() {
+    appBarModel.value = await viewService.appBarModel();
+    console.log('Refreshed app-bar-model', appBarModel.value);
+    categoriesChanged();
+  }
+
+  async function categoriesChanged() {
+    categories.value = await articleService.categories();
+    console.log('Refreshed categories', categories.value);
+
+    if (!categories.value.some((c) => c.code === currentCategory.value?.code)) {
+      currentCategory.value = undefined;
+    }
+  }
+
+  async function loadArticles(category: string) {
+    let result: ArticlePreview[] | ApiError = await articleService.articles(category);
+    if (isError(result)) {
+      console.log(result);
+      return;
+    }
+
+    articles.value = result;
+  }
+
+  function isError(value: any | ApiError): value is ApiError {
+    return (value as ApiError).status !== undefined;
   }
 
   function loadArticle(category: string, article: string): ArticleDetail | undefined {
@@ -97,5 +76,13 @@ export const useAppStore = defineStore('app', () => {
     };
   }
 
-  return { categories, currentCategory, articles, fetchArticles, loadArticle };
+  return {
+    appBarModel,
+    appBarModelChanged,
+    categories,
+    currentCategory,
+    articles,
+    loadArticles,
+    loadArticle,
+  };
 });
