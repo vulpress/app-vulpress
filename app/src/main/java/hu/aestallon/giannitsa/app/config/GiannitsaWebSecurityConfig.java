@@ -82,6 +82,7 @@ public class GiannitsaWebSecurityConfig {
     return http
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(requests -> requests
+            .requestMatchers("/api/auth").authenticated()
             .requestMatchers(
                 "/api/auth/login",
                 "/favicon.ico",

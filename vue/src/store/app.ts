@@ -49,6 +49,7 @@ export const useAppStore = defineStore('app', () => {
     }
 
     articles.value = result;
+    currentCategory.value = categories.value.find((c) => c.code === category);
   }
 
   function isError(value: any | ApiError): value is ApiError {

@@ -2,22 +2,120 @@
 import { AppBarModel } from '@/api/giannitsa';
 import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 import { Ref } from 'vue';
+import { useRouter } from 'vue-router';
+import LoginDialog from '@/components/LoginDialog.vue';
+import { ref } from 'vue';
+import { authService } from '@/services';
+
+interface LoginAction {
+  code: string;
+  name: string;
+}
+
+const anonymousLoginActions: LoginAction[] = [
+  {
+    code: 'register',
+    name: 'Register',
+  },
+  {
+    code: 'login',
+    name: 'Login',
+  },
+];
+const userLoginActions: LoginAction[] = [
+  {
+    code: 'profile',
+    name: 'Profile',
+  },
+  {
+    code: 'logout',
+    name: 'Logout',
+  },
+];
 
 const app = useAppStore();
+const router = useRouter();
 const { appBarModel } = storeToRefs(app);
 app.appBarModelChanged();
+
+const profileActions = computed(() => {
+  return appBarModel.value?.loggedIn ? userLoginActions : anonymousLoginActions;
+});
+
+const showLoginDialog = ref<boolean>(false);
+
+function onTitleClicked() {
+  router.push({ name: 'main' });
+}
+
+function onCategoryClicked(category: string) {
+  router.push({ name: 'category', params: { category } });
+}
+
+function onProfileActionClicked(code: string) {
+  switch (code) {
+    case 'login':
+      showLoginDialog.value = true;
+      break;
+    case 'logout':
+      authService.logout();
+      app.appBarModelChanged();
+      break;
+  }
+}
+
+function onLoginClosed() {
+  console.log('invoked onLoginClosed');
+  showLoginDialog.value = false;
+  app.appBarModelChanged();
+}
 </script>
 
 <template>
   <v-app-bar class="border-strong">
-    <v-app-bar-title class="navbar-title">{{ appBarModel?.appName }}</v-app-bar-title>
+    <v-app-bar-title class="navbar-title" @click="onTitleClicked">{{
+      appBarModel?.appName
+    }}</v-app-bar-title>
     <v-btn icon="mdi-magnify"></v-btn>
-    <v-btn
-      :icon="appBarModel?.loggedIn ? 'mdi-account-circle-outline' : 'mdi-account-circle-full'"
-    ></v-btn>
-    <v-app-bar-nav-icon></v-app-bar-nav-icon>
+    <v-btn>
+      <v-icon>{{
+        appBarModel?.loggedIn ? 'mdi-account-circle' : 'mdi-account-circle-outline'
+      }}</v-icon>
+      <v-menu activator="parent">
+        <v-list>
+          <v-list-item
+            v-for="action in profileActions"
+            :key="action.code"
+            :value="action.code"
+            @click="onProfileActionClicked(action.code)"
+          >
+            <v-list-item-title>{{ action.name }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
+    <v-app-bar-nav-icon>
+      <v-icon>$menu</v-icon>
+      <v-menu activator="parent">
+        <v-list>
+          <v-list-item
+            v-for="action in appBarModel?.availableCategories"
+            :key="action.code"
+            :value="action.code"
+            @click="onCategoryClicked(action.code)"
+          >
+            <v-list-item-title>{{ action.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-app-bar-nav-icon>
   </v-app-bar>
+
+  <v-dialog :model-value="showLoginDialog">
+    <login-dialog @ready-to-close="onLoginClosed"></login-dialog>
+  </v-dialog>
 </template>
 
 <style scoped>
