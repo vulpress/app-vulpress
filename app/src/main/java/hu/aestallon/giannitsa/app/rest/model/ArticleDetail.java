@@ -22,9 +22,6 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ArticleDetail {
 
-  @JsonProperty("id")
-  private Long id;
-
   @JsonProperty("code")
   private String code;
 
@@ -34,25 +31,6 @@ public class ArticleDetail {
   @JsonProperty("paragraphs")
   @Valid
   private java.util.List<Paragraph> paragraphs = new java.util.ArrayList<>();
-
-  public ArticleDetail id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-  */
-  @NotNull 
-  @Schema(name = "id", required = true)
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public ArticleDetail code(String code) {
     this.code = code;
@@ -125,22 +103,20 @@ public class ArticleDetail {
       return false;
     }
     ArticleDetail articleDetail = (ArticleDetail) o;
-    return Objects.equals(this.id, articleDetail.id) &&
-        Objects.equals(this.code, articleDetail.code) &&
+    return Objects.equals(this.code, articleDetail.code) &&
         Objects.equals(this.title, articleDetail.title) &&
         Objects.equals(this.paragraphs, articleDetail.paragraphs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, code, title, paragraphs);
+    return Objects.hash(code, title, paragraphs);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ArticleDetail {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    paragraphs: ").append(toIndentedString(paragraphs)).append("\n");

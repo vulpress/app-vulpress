@@ -35,7 +35,7 @@ public interface ArticlesApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"code\" : \"code\", \"id\" : 0, \"title\" : \"title\", \"paragraphs\" : [ { \"image\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"text\" : \"text\", \"title\" : \"title\" }, { \"image\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"text\" : \"text\", \"title\" : \"title\" } ] }";
+                    String exampleString = "{ \"code\" : \"code\", \"title\" : \"title\", \"paragraphs\" : [ { \"image\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"text\" : \"text\", \"title\" : \"title\" }, { \"image\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"text\" : \"text\", \"title\" : \"title\" } ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

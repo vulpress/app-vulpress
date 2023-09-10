@@ -15,11 +15,11 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * Category
+ * UiAction
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class Category {
+public class UiAction {
 
   @JsonProperty("code")
   private String code;
@@ -27,20 +27,23 @@ public class Category {
   @JsonProperty("title")
   private String title;
 
-  @JsonProperty("description")
-  private String description;
+  @JsonProperty("colour")
+  private String colour;
 
-  public Category code(String code) {
+  @JsonProperty("icon")
+  private String icon;
+
+  public UiAction code(String code) {
     this.code = code;
     return this;
   }
 
   /**
-   * URL-safe unique identifier. 
+   * Get code
    * @return code
   */
   @NotNull 
-  @Schema(name = "code", example = "homilies", description = "URL-safe unique identifier. ", required = true)
+  @Schema(name = "code", required = true)
   public String getCode() {
     return code;
   }
@@ -49,7 +52,7 @@ public class Category {
     this.code = code;
   }
 
-  public Category title(String title) {
+  public UiAction title(String title) {
     this.title = title;
     return this;
   }
@@ -58,8 +61,8 @@ public class Category {
    * Get title
    * @return title
   */
-  
-  @Schema(name = "title", example = "Homilies", required = false)
+  @NotNull 
+  @Schema(name = "title", required = true)
   public String getTitle() {
     return title;
   }
@@ -68,23 +71,42 @@ public class Category {
     this.title = title;
   }
 
-  public Category description(String description) {
-    this.description = description;
+  public UiAction colour(String colour) {
+    this.colour = colour;
     return this;
   }
 
   /**
-   * Get description
-   * @return description
+   * Get colour
+   * @return colour
   */
   
-  @Schema(name = "description", required = false)
-  public String getDescription() {
-    return description;
+  @Schema(name = "colour", required = false)
+  public String getColour() {
+    return colour;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setColour(String colour) {
+    this.colour = colour;
+  }
+
+  public UiAction icon(String icon) {
+    this.icon = icon;
+    return this;
+  }
+
+  /**
+   * Get icon
+   * @return icon
+  */
+  
+  @Schema(name = "icon", required = false)
+  public String getIcon() {
+    return icon;
+  }
+
+  public void setIcon(String icon) {
+    this.icon = icon;
   }
 
   @Override
@@ -95,24 +117,26 @@ public class Category {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Category category = (Category) o;
-    return Objects.equals(this.code, category.code) &&
-        Objects.equals(this.title, category.title) &&
-        Objects.equals(this.description, category.description);
+    UiAction uiAction = (UiAction) o;
+    return Objects.equals(this.code, uiAction.code) &&
+        Objects.equals(this.title, uiAction.title) &&
+        Objects.equals(this.colour, uiAction.colour) &&
+        Objects.equals(this.icon, uiAction.icon);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, title, description);
+    return Objects.hash(code, title, colour, icon);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Category {\n");
+    sb.append("class UiAction {\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    colour: ").append(toIndentedString(colour)).append("\n");
+    sb.append("    icon: ").append(toIndentedString(icon)).append("\n");
     sb.append("}");
     return sb.toString();
   }

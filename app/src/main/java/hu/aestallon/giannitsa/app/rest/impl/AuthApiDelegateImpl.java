@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package hu.aestallon.giannitsa.app.controller;
+package hu.aestallon.giannitsa.app.rest.impl;
 
 import hu.aestallon.giannitsa.app.auth.AuthService;
 import hu.aestallon.giannitsa.app.rest.api.AuthApiDelegate;

@@ -21,9 +21,6 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ArticlePreview {
 
-  @JsonProperty("id")
-  private Long id;
-
   @JsonProperty("code")
   private String code;
 
@@ -35,25 +32,6 @@ public class ArticlePreview {
 
   @JsonProperty("thumbnail")
   private java.util.UUID thumbnail;
-
-  public ArticlePreview id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-  */
-  @NotNull 
-  @Schema(name = "id", required = true)
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public ArticlePreview code(String code) {
     this.code = code;
@@ -140,8 +118,7 @@ public class ArticlePreview {
       return false;
     }
     ArticlePreview articlePreview = (ArticlePreview) o;
-    return Objects.equals(this.id, articlePreview.id) &&
-        Objects.equals(this.code, articlePreview.code) &&
+    return Objects.equals(this.code, articlePreview.code) &&
         Objects.equals(this.title, articlePreview.title) &&
         Objects.equals(this.description, articlePreview.description) &&
         Objects.equals(this.thumbnail, articlePreview.thumbnail);
@@ -149,14 +126,13 @@ public class ArticlePreview {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, code, title, description, thumbnail);
+    return Objects.hash(code, title, description, thumbnail);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ArticlePreview {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");

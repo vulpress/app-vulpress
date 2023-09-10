@@ -40,7 +40,7 @@ public interface CategoriesApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"displayValue\" : \"Homilies\", \"code\" : \"homilies\" }";
+                    String exampleString = "{ \"code\" : \"homilies\", \"description\" : \"description\", \"title\" : \"Homilies\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -80,7 +80,7 @@ public interface CategoriesApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"thumbnail\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"code\" : \"code\", \"description\" : \"description\", \"id\" : 0, \"title\" : \"title\" }";
+                    String exampleString = "{ \"thumbnail\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"code\" : \"code\", \"description\" : \"description\", \"title\" : \"title\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -104,7 +104,7 @@ public interface CategoriesApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"thumbnail\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"code\" : \"code\", \"description\" : \"description\", \"id\" : 0, \"title\" : \"title\" }";
+                    String exampleString = "{ \"thumbnail\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"code\" : \"code\", \"description\" : \"description\", \"title\" : \"title\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -125,7 +125,7 @@ public interface CategoriesApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"displayValue\" : \"Homilies\", \"code\" : \"homilies\" }";
+                    String exampleString = "{ \"code\" : \"homilies\", \"description\" : \"description\", \"title\" : \"Homilies\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
