@@ -93,7 +93,8 @@ public class GiannitsaWebSecurityConfig {
                 "/main.js.map",
                 "/index.html",
                 "/assets/**",
-                "/",
+                "/**",
+                "/main/**",
                 "/login", "/h2-console/**").permitAll()
             .anyRequest().authenticated())
         .formLogin(form -> form

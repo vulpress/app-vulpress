@@ -1,5 +1,6 @@
 package hu.aestallon.giannitsa.app.rest.api;
 
+import hu.aestallon.giannitsa.app.rest.model.ApiError;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 import hu.aestallon.giannitsa.app.rest.model.ArticlePreview;
 import hu.aestallon.giannitsa.app.rest.model.Category;
@@ -147,6 +148,8 @@ public interface CategoriesApiDelegate {
      * @param description Succinct description for the article.  (required)
      * @param documentFile  (required)
      * @return Created (status code 201)
+     *         or Unauthorized (status code 401)
+     *         or Conflict (status code 409)
      * @see CategoriesApi#uploadArticle
      */
     default ResponseEntity<ArticleDetail> uploadArticle(String category,

@@ -5,6 +5,7 @@
  */
 package hu.aestallon.giannitsa.app.rest.api;
 
+import hu.aestallon.giannitsa.app.rest.model.ApiError;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,6 +42,8 @@ public interface ArticlesApi {
      *
      * @param article  (required)
      * @return Ok (status code 200)
+     *         or Not found (status code 404)
+     *         or Unauthorized (status code 401)
      */
     @Operation(
         operationId = "getArticle",
@@ -49,6 +52,10 @@ public interface ArticlesApi {
         responses = {
             @ApiResponse(responseCode = "200", description = "Ok", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ArticleDetail.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             })
         }
     )

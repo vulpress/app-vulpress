@@ -146,8 +146,16 @@ paths:
                 $ref: '#/components/schemas/Category'
         '401':
           description: Insufficient authorization for category creation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
         '409':
           description: Category already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
 
   /categories/{category}:
     get:
@@ -196,6 +204,10 @@ paths:
           description: Category deleted
         '401':
           description: Insufficient authorization to delete category.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
 
     post:
       summary: Creates a new article in this category
@@ -244,6 +256,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ArticleDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
 
   /categories/{category}/{page}:
     get:
@@ -300,6 +324,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ArticleDetail'
+        '404':
+          description: Not found
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
 
 components:
   schemas:

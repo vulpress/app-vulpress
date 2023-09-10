@@ -79,7 +79,6 @@ export const useAppStore = defineStore('app', () => {
   function loadArticle(category: string, article: string): ArticleDetail | undefined {
     return {
       code: article,
-      id: 1,
       title: `${article} title`,
       paragraphs: [
         {

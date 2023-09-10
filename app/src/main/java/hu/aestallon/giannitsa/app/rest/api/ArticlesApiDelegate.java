@@ -1,5 +1,6 @@
 package hu.aestallon.giannitsa.app.rest.api;
 
+import hu.aestallon.giannitsa.app.rest.model.ApiError;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +30,8 @@ public interface ArticlesApiDelegate {
      *
      * @param article  (required)
      * @return Ok (status code 200)
+     *         or Not found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see ArticlesApi#getArticle
      */
     default ResponseEntity<ArticleDetail> getArticle(String article) {

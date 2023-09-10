@@ -5,6 +5,7 @@
  */
 package hu.aestallon.giannitsa.app.rest.api;
 
+import hu.aestallon.giannitsa.app.rest.model.ApiError;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 import hu.aestallon.giannitsa.app.rest.model.ArticlePreview;
 import hu.aestallon.giannitsa.app.rest.model.Category;
@@ -56,8 +57,12 @@ public interface CategoriesApi {
             @ApiResponse(responseCode = "201", description = "Category has been created.", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Category.class))
             }),
-            @ApiResponse(responseCode = "401", description = "Insufficient authorization for category creation."),
-            @ApiResponse(responseCode = "409", description = "Category already exists.")
+            @ApiResponse(responseCode = "401", description = "Insufficient authorization for category creation.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "Category already exists.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            })
         }
     )
     @RequestMapping(
@@ -87,12 +92,15 @@ public interface CategoriesApi {
         tags = { "Article" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Category deleted"),
-            @ApiResponse(responseCode = "401", description = "Insufficient authorization to delete category.")
+            @ApiResponse(responseCode = "401", description = "Insufficient authorization to delete category.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            })
         }
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/categories/{category}"
+        value = "/categories/{category}",
+        produces = { "application/json" }
     )
     default ResponseEntity<Void> deleteCategory(
         @Parameter(name = "category", description = "", required = true) @PathVariable("category") String category
@@ -208,6 +216,8 @@ public interface CategoriesApi {
      * @param description Succinct description for the article.  (required)
      * @param documentFile  (required)
      * @return Created (status code 201)
+     *         or Unauthorized (status code 401)
+     *         or Conflict (status code 409)
      */
     @Operation(
         operationId = "uploadArticle",
@@ -216,6 +226,12 @@ public interface CategoriesApi {
         responses = {
             @ApiResponse(responseCode = "201", description = "Created", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ArticleDetail.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "Conflict", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             })
         }
     )
