@@ -61,7 +61,7 @@ public class H2DatabaseConfig extends AbstractJdbcConfiguration {
   @Bean
   @Profile("h2 & bootstrap")
   @Qualifier("dataSourceInitializerH2")
-  DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
+  DataSourceInitializer dataSourceInitializer(@Qualifier("dataSourceH2") DataSource dataSource) {
     DataSourceInitializer initializer = new DataSourceInitializer();
     initializer.setDataSource(dataSource);
 
