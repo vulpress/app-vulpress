@@ -1,5 +1,6 @@
 package hu.aestallon.giannitsa.app.rest.api;
 
+import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 import hu.aestallon.giannitsa.app.rest.model.ArticlePreview;
 import hu.aestallon.giannitsa.app.rest.model.Category;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,13 +31,13 @@ public interface CategoriesApiDelegate {
      * POST /categories : Create a new category
      * Creates a new, empty category. The category&#39;s URL-safe unique code is generated server side, and must be unique. 
      *
-     * @param body  (optional)
+     * @param category  (optional)
      * @return Category has been created. (status code 201)
      *         or Insufficient authorization for category creation. (status code 401)
      *         or Category already exists. (status code 409)
      * @see CategoriesApi#createCategory
      */
-    default ResponseEntity<Category> createCategory(String body) {
+    default ResponseEntity<Category> createCategory(Category category) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -148,12 +149,21 @@ public interface CategoriesApiDelegate {
      * @return Created (status code 201)
      * @see CategoriesApi#uploadArticle
      */
-    default ResponseEntity<Void> uploadArticle(String category,
+    default ResponseEntity<ArticleDetail> uploadArticle(String category,
         String title,
         LocalDate issued,
         String author,
         String description,
         MultipartFile documentFile) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"code\" : \"code\", \"author\" : \"author\", \"title\" : \"title\", \"issueDate\" : \"2000-01-23\", \"paragraphs\" : [ { \"image\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"text\" : \"text\", \"title\" : \"title\" }, { \"image\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"text\" : \"text\", \"title\" : \"title\" } ] }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

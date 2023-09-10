@@ -18,4 +18,13 @@ public record ContentCategory(
     @Column("image") UUID imageUuid,
     @Column("created_at") LocalDateTime createdAt
 ) {
+  public ContentCategory {
+    description = (description == null) ? "" : description;
+    createdAt = (createdAt == null) ? LocalDateTime.now() : createdAt;
+  }
+
+  public ContentCategory(String title, String normalisedTitle, String description, boolean builtIn,
+                         boolean publiclyVisible, UUID imageUuid, LocalDateTime createdAt) {
+    this(null, title, normalisedTitle, description, builtIn, publiclyVisible, imageUuid, createdAt);
+  }
 }

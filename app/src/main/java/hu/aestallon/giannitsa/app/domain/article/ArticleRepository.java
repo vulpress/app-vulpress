@@ -40,4 +40,8 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
   @Modifying
   @Query("update article a set a.content_category = :categoryId where a.norm_title = :normTitle")
   boolean moveArticle(@Param("normTitle") String normTitle, @Param("category") Long categoryId);
+
+  @Modifying
+  @Query("update article a set a.content_category = :to where a.content_category = :from")
+  boolean moveAllArticles(@Param("from") Long from, @Param("to") Long to);
 }

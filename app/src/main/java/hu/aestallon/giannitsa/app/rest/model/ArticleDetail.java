@@ -5,6 +5,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import hu.aestallon.giannitsa.app.rest.model.Paragraph;
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
 import javax.validation.Valid;
@@ -27,6 +29,13 @@ public class ArticleDetail {
 
   @JsonProperty("title")
   private String title;
+
+  @JsonProperty("issueDate")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate issueDate;
+
+  @JsonProperty("author")
+  private String author;
 
   @JsonProperty("paragraphs")
   @Valid
@@ -70,6 +79,44 @@ public class ArticleDetail {
     this.title = title;
   }
 
+  public ArticleDetail issueDate(LocalDate issueDate) {
+    this.issueDate = issueDate;
+    return this;
+  }
+
+  /**
+   * Get issueDate
+   * @return issueDate
+  */
+  @Valid 
+  @Schema(name = "issueDate", required = false)
+  public LocalDate getIssueDate() {
+    return issueDate;
+  }
+
+  public void setIssueDate(LocalDate issueDate) {
+    this.issueDate = issueDate;
+  }
+
+  public ArticleDetail author(String author) {
+    this.author = author;
+    return this;
+  }
+
+  /**
+   * Get author
+   * @return author
+  */
+  
+  @Schema(name = "author", required = false)
+  public String getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(String author) {
+    this.author = author;
+  }
+
   public ArticleDetail paragraphs(java.util.List<Paragraph> paragraphs) {
     this.paragraphs = paragraphs;
     return this;
@@ -105,12 +152,14 @@ public class ArticleDetail {
     ArticleDetail articleDetail = (ArticleDetail) o;
     return Objects.equals(this.code, articleDetail.code) &&
         Objects.equals(this.title, articleDetail.title) &&
+        Objects.equals(this.issueDate, articleDetail.issueDate) &&
+        Objects.equals(this.author, articleDetail.author) &&
         Objects.equals(this.paragraphs, articleDetail.paragraphs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, title, paragraphs);
+    return Objects.hash(code, title, issueDate, author, paragraphs);
   }
 
   @Override
@@ -119,6 +168,8 @@ public class ArticleDetail {
     sb.append("class ArticleDetail {\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
+    sb.append("    issueDate: ").append(toIndentedString(issueDate)).append("\n");
+    sb.append("    author: ").append(toIndentedString(author)).append("\n");
     sb.append("    paragraphs: ").append(toIndentedString(paragraphs)).append("\n");
     sb.append("}");
     return sb.toString();

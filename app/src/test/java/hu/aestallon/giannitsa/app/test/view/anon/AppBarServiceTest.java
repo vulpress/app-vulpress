@@ -1,8 +1,9 @@
-package hu.aestallon.giannitsa.app.view;
+package hu.aestallon.giannitsa.app.test.view.anon;
 
 import hu.aestallon.giannitsa.app.rest.model.AppBarModel;
 import hu.aestallon.giannitsa.app.rest.model.UiAction;
 import hu.aestallon.giannitsa.app.config.AnonymousUserTest;
+import hu.aestallon.giannitsa.app.view.ViewNames;
 import hu.aestallon.giannitsa.app.view.distributor.ViewServiceDistributor;
 import hu.aestallon.giannitsa.app.view.impl.AppBarService;
 import org.junit.jupiter.api.Test;

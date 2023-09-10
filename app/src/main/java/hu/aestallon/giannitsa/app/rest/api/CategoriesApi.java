@@ -5,6 +5,7 @@
  */
 package hu.aestallon.giannitsa.app.rest.api;
 
+import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 import hu.aestallon.giannitsa.app.rest.model.ArticlePreview;
 import hu.aestallon.giannitsa.app.rest.model.Category;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -42,7 +43,7 @@ public interface CategoriesApi {
      * POST /categories : Create a new category
      * Creates a new, empty category. The category&#39;s URL-safe unique code is generated server side, and must be unique. 
      *
-     * @param body  (optional)
+     * @param category  (optional)
      * @return Category has been created. (status code 201)
      *         or Insufficient authorization for category creation. (status code 401)
      *         or Category already exists. (status code 409)
@@ -66,9 +67,9 @@ public interface CategoriesApi {
         consumes = { "application/json" }
     )
     default ResponseEntity<Category> createCategory(
-        @Parameter(name = "body", description = "") @Valid @RequestBody(required = false) String body
+        @Parameter(name = "Category", description = "") @Valid @RequestBody(required = false) Category category
     ) {
-        return getDelegate().createCategory(body);
+        return getDelegate().createCategory(category);
     }
 
 
@@ -213,15 +214,18 @@ public interface CategoriesApi {
         summary = "Creates a new article in this category",
         tags = { "Article" },
         responses = {
-            @ApiResponse(responseCode = "201", description = "Created")
+            @ApiResponse(responseCode = "201", description = "Created", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ArticleDetail.class))
+            })
         }
     )
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/categories/{category}",
+        produces = { "application/json" },
         consumes = { "multipart/form-data" }
     )
-    default ResponseEntity<Void> uploadArticle(
+    default ResponseEntity<ArticleDetail> uploadArticle(
         @Parameter(name = "category", description = "", required = true) @PathVariable("category") String category,
         @Parameter(name = "title", description = "The desired title of the article ", required = true) @Valid @RequestParam(value = "title", required = true) String title,
         @Parameter(name = "issued", description = "The date for which this article is issued, may be null. ", required = true) @Valid @RequestParam(value = "issued", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate issued,

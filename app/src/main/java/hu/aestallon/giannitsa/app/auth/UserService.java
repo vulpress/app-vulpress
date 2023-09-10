@@ -48,8 +48,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-  private static final String PLAIN = "PLAIN";
-  private static final String ADMIN = "ADMIN";
+  public static final String PLAIN = "PLAIN";
+  public static final String ADMIN = "ADMIN";
 
   private final UserRepository userRepository;
 

@@ -136,7 +136,7 @@ paths:
         content:
           application/json:
             schema:
-              type: string
+              $ref: '#/components/schemas/Category'
       responses:
         '201':
           description: Category has been created.
@@ -240,7 +240,10 @@ paths:
       responses:
         '201':
           description: Created
-
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleDetail'
 
   /categories/{category}/{page}:
     get:
@@ -358,6 +361,11 @@ components:
             URL-safe unique identifier.
         title:
           type: string
+        issueDate:
+          type: string
+          format: date
+        author:
+          type: string
         paragraphs:
           type: array
           items:
@@ -400,3 +408,17 @@ components:
         icon:
           type: string
       required: [ code, title ]
+
+    ApiError:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        timestamp:
+          type: string
+          format: date-time
+        message:
+          type: string
+        description:
+          type: string
