@@ -54,8 +54,6 @@ class WebSecurityTest {
 
   @Autowired
   RestTemplate restTemplate;
-  @Autowired
-  ObjectMapper objectMapper;
   @LocalServerPort
   private int    serverPort;
   @Value("${openapi.giannitsaWebAppBFF.base-path:/}")

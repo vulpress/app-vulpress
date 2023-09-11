@@ -1,6 +1,7 @@
 package hu.aestallon.giannitsa.app.config;
 
 import hu.aestallon.giannitsa.app.auth.UserRepository;
+import hu.aestallon.giannitsa.app.auth.UserService;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,7 +17,7 @@ import java.lang.annotation.Target;
     classes = {
         ViewTestConfig.class,
         UserRepository.class,
-        AnonymousUserService.class
+        UserService.class
     },
     properties = {
         "giannitsa-db.settings.h2.username=test-sa",
@@ -35,5 +36,5 @@ import java.lang.annotation.Target;
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface AnonymousUserTest {
+public @interface BusinessLogicTest {
 }

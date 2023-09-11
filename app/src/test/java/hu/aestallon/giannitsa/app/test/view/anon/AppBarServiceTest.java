@@ -1,8 +1,9 @@
 package hu.aestallon.giannitsa.app.test.view.anon;
 
+import hu.aestallon.giannitsa.app.config.BusinessLogicTest;
 import hu.aestallon.giannitsa.app.rest.model.AppBarModel;
 import hu.aestallon.giannitsa.app.rest.model.UiAction;
-import hu.aestallon.giannitsa.app.config.AnonymousUserTest;
+import hu.aestallon.giannitsa.app.test.util.Users;
 import hu.aestallon.giannitsa.app.view.ViewNames;
 import hu.aestallon.giannitsa.app.view.distributor.ViewServiceDistributor;
 import hu.aestallon.giannitsa.app.view.impl.AppBarService;
@@ -13,7 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AnonymousUserTest
+@BusinessLogicTest
 class AppBarServiceTest {
 
   @Autowired
@@ -28,6 +29,8 @@ class AppBarServiceTest {
 
   @Test
   void requestingAppBarActionsForAnonymousUser_shouldReturnPublicCategories() throws Exception {
+    Users.asAnonymous();
+
     final List<UiAction> appBarActions = viewServiceDistributor.actions(ViewNames.APP_BAR);
     assertThat(appBarActions)
         .isNotNull()
@@ -36,6 +39,8 @@ class AppBarServiceTest {
 
   @Test
   void requestingAppBarModelForAnonymousUser_returnsNoLoggedInState_publicCategories() {
+    Users.asAnonymous();
+
     AppBarModel model = appBarService.model();
     assertThat(model)
         .isNotNull();
