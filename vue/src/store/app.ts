@@ -19,6 +19,9 @@ import { ApiError, AppBarModel, ArticleDetail, ArticlePreview, Category } from '
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { articleService, viewService } from '@/services';
+import { computed } from 'vue';
+import { ComputedRef } from 'vue';
+import { ViewName } from './view.constants';
 
 export const useAppStore = defineStore('app', () => {
   const appBarModel = ref<AppBarModel | undefined>();
@@ -78,12 +81,16 @@ export const useAppStore = defineStore('app', () => {
   }
 
   return {
+    // refs:
     appBarModel,
-    appBarModelChanged,
     categories,
     currentCategory,
     articles,
+
+    // methods:
+    appBarModelChanged,
     loadArticles,
     loadArticle,
+    // computed values:
   };
 });

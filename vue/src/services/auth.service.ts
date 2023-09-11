@@ -1,8 +1,7 @@
 import { AuthApi, AuthenticationRequest } from '@/api/giannitsa';
 
 export default class AuthService {
-  constructor(private authApi: AuthApi) {
-  }
+  constructor(private authApi: AuthApi) {}
 
   async isAuthenticated(): Promise<boolean> {
     const jwtToken = localStorage.getItem('jwtToken');
