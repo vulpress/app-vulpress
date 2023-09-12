@@ -84,14 +84,15 @@ function onLoginClosed() {
         appBarModel?.loggedIn ? 'mdi-account-circle' : 'mdi-account-circle-outline'
       }}</v-icon>
       <v-menu activator="parent">
-        <v-list>
+        <v-list class="menu-card">
           <v-list-item
+            class="menu-item"
             v-for="action in profileActions"
             :key="action.code"
             :value="action.code"
             @click="onProfileActionClicked(action.code)"
           >
-            <v-list-item-title>{{ action.name }}</v-list-item-title>
+            <v-list-item-title class="menu-item-text">{{ action.name }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -99,21 +100,22 @@ function onLoginClosed() {
     <v-app-bar-nav-icon>
       <v-icon>$menu</v-icon>
       <v-menu activator="parent">
-        <v-list>
+        <v-list class="menu-card">
           <v-list-item
+            class="menu-item"
             v-for="action in appBarModel?.availableCategories"
             :key="action.code"
             :value="action.code"
             @click="onCategoryClicked(action.code)"
           >
-            <v-list-item-title>{{ action.title }}</v-list-item-title>
+            <v-list-item-title class="menu-item-text">{{ action.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar-nav-icon>
   </v-app-bar>
 
-  <v-dialog :model-value="showLoginDialog">
+  <v-dialog v-model="showLoginDialog">
     <login-dialog @ready-to-close="onLoginClosed"></login-dialog>
   </v-dialog>
 </template>
@@ -123,5 +125,26 @@ function onLoginClosed() {
   font-size: 1.5rem;
   font-weight: 700;
   color: #492b7c;
+}
+
+.menu-card {
+  display: inline-flex;
+  padding: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
+  border-radius: 0.3125rem;
+  border: 2px solid var(--gr-primary);
+}
+
+.menu-item {
+  padding: unset !important;
+  margin: unset !important;
+}
+
+.menu-item-text {
+  color: var(--gr-primary);
+  font-size: 1rem;
+  font-weight: 700;
 }
 </style>

@@ -41,9 +41,9 @@ function onArchiveClicked() {
 const showNewCategoryDialog: Ref<boolean> = ref<boolean>(false);
 
 async function onNewCategoryCreated(category: Category) {
+  showNewCategoryDialog.value = false;
   let res = await articleService.createCategory(category);
   console.log('Create category result: ', res);
-  showNewCategoryDialog.value = false;
   app.appBarModelChanged();
 }
 </script>
@@ -51,9 +51,12 @@ async function onNewCategoryCreated(category: Category) {
 <template>
   <h1 class="view-title">Categories</h1>
   <div v-if="actions.length > 0" class="ui-action-container">
-    <v-btn color="primary" class="ui-action" @click="showNewCategoryDialog = true"
-      >New category</v-btn
-    >
+    <v-btn color="primary" class="ui-action"
+      >New category
+      <v-dialog activator="parent" v-model="showNewCategoryDialog">
+        <new-category-dialog @complete="onNewCategoryCreated"></new-category-dialog>
+      </v-dialog>
+    </v-btn>
     <v-btn color="accent" class="ui-action" @click="onArchiveClicked">Archive</v-btn>
   </div>
   <div class="card-container">
@@ -64,10 +67,6 @@ async function onNewCategoryCreated(category: Category) {
       @click="onCategoryClicked(c.code)"
     ></giannitsa-card>
   </div>
-
-  <v-dialog :model-value="showNewCategoryDialog">
-    <new-category-dialog @complete="onNewCategoryCreated"></new-category-dialog>
-  </v-dialog>
 </template>
 
 <style scoped></style>
