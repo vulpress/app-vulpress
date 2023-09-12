@@ -54,6 +54,10 @@ tasks.named('test') {
   useJUnitPlatform()
 }
 
+tasks.named("jar") {
+  enabled = false
+}
+
 def processFrontendResourcesTask = 'processFrontendResources'
 
 tasks.register(processFrontendResourcesTask, Copy) {
