@@ -16,15 +16,15 @@
 
 // Utilities
 import { ApiError, AppBarModel, ArticleDetail, ArticlePreview, Category } from '@/api/giannitsa';
+import { articleService, viewService } from '@/services';
+import ArticleUpload from '@/services/article-upload.model';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { articleService, viewService } from '@/services';
-import { computed } from 'vue';
-import { ComputedRef } from 'vue';
-import { ViewName } from './view.constants';
-import ArticleUpload from '@/services/article-upload.model';
+import { useRouter } from 'vue-router';
 
 export const useAppStore = defineStore('app', () => {
+  const router = useRouter();
+
   const appBarModel = ref<AppBarModel | undefined>();
   const categories = ref<Category[]>([]);
   const articles = ref<ArticlePreview[]>([]);
@@ -42,8 +42,11 @@ export const useAppStore = defineStore('app', () => {
 
     if (!categories.value.some((c) => c.code === currentCategory.value?.code)) {
       currentCategory.value = undefined;
+      router.push({ name: 'main' });
     }
   }
+
+  function currentCategoryChanged() {}
 
   async function loadArticles(category: string) {
     let result: ArticlePreview[] | ApiError = await articleService.articles(category);
