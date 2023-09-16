@@ -7,6 +7,7 @@
 
 .border-strong {
   border: 0.3rem solid var(--gr-primary) !important;
+  /*width: calc(100vw - 0.6rem) !important;*/
 }
 
 .view-title {
@@ -29,6 +30,7 @@
 
 .ui-action {
   text-transform: unset;
+  flex: 1;
 }
 .card-container {
   display: flex;

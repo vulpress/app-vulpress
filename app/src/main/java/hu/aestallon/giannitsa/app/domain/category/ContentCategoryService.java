@@ -97,4 +97,7 @@ public interface ContentCategoryService {
    */
   ArticleDetail uploadArticle(String categoryCode, ArticleDetail articleDetail, String description,
                               InputStream content);
+
+  ArticleDetail getArticle(String articleCode);
+
 }

@@ -16,12 +16,14 @@
 
 package hu.aestallon.giannitsa.app.domain.article;
 
+import hu.aestallon.giannitsa.app.domain.category.ContentCategory;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -44,4 +46,7 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
   @Modifying
   @Query("update article a set a.content_category = :to where a.content_category = :from")
   boolean moveAllArticles(@Param("from") Long from, @Param("to") Long to);
+
+  Optional<Article> findByNormalisedTitle(String normalisedTitle);
+
 }

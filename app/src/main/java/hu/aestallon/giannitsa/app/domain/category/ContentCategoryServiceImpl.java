@@ -3,6 +3,7 @@ package hu.aestallon.giannitsa.app.domain.category;
 import hu.aestallon.giannitsa.app.auth.UserService;
 import hu.aestallon.giannitsa.app.domain.ConstraintViolationException;
 import hu.aestallon.giannitsa.app.domain.ForbiddenOperationException;
+import hu.aestallon.giannitsa.app.domain.article.Article;
 import hu.aestallon.giannitsa.app.domain.article.ArticleRepository;
 import hu.aestallon.giannitsa.app.domain.article.ArticleService;
 import hu.aestallon.giannitsa.app.domain.util.StringNormaliser;
@@ -24,7 +25,6 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.collectingAndThen;
@@ -157,13 +157,37 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
     }
   }
 
+  @Override
+  public ArticleDetail getArticle(String articleCode) {
+    final Article article = articleRepository
+        .findByNormalisedTitle(Objects.requireNonNull(articleCode))
+        .orElseThrow(() -> new IllegalArgumentException(articleCode + " is unknown!"));
+
+    final boolean categoryUnavailable =  contentCategoryRepository
+        .findById(article.contentCategory().getId())
+        .filter(this::isCategoryPermitted)
+        .isEmpty();
+    if (categoryUnavailable) {
+      throw new ForbiddenOperationException(articleCode + " is not in an available category!");
+    }
+
+    return article.toDetail();
+  }
+
+  private boolean isCategoryPermitted(ContentCategory category) {
+    return category != null && (category.publiclyVisible() || userService.isCurrentUserAdmin());
+  }
+
   private static ArticleDetail fromDocument(Document document, ArticleDetail articleDetail) {
-    return document.content().stream()
+    final List<Paragraph> paragraphs = document.content().stream()
         .filter(Text.class::isInstance)
         .map(Text.class::cast)
         .map(Text::content)
-        .map(new Paragraph()::text)
-        .collect(collectingAndThen(toList(), articleDetail::paragraphs));
+        .peek(System.out::println)
+        .map(s -> new Paragraph().text(s))
+        .peek(System.out::println)
+        .toList();
+    return articleDetail.paragraphs(paragraphs);
   }
 
 }

@@ -46,15 +46,7 @@ public class ArticleService {
         Collections.emptySet());
 
     article = articleRepository.save(article);
-    return new ArticleDetail()
-        .code(article.normalisedTitle())
-        .title(article.title())
-        .author(article.authorName())
-        .issueDate(article.issueDate())
-        .paragraphs(article.paragraphs().stream()
-            .filter(p -> Article.ParagraphType.TEXT == p.type())
-            .map(p -> new Paragraph().text(p.content()))
-            .toList());
+    return article.toDetail();
   }
 
 }
