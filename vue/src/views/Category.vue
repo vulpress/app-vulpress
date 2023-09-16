@@ -6,12 +6,20 @@ import { ref } from 'vue';
 import GiannitsaCard from '@/components/GiannitsaCard.vue';
 import ArticleUploadDialog from '@/components/ArticleUploadDialog.vue';
 import ArticleUpload from '@/services/article-upload.model';
+import { storeToRefs } from 'pinia';
+import { watch } from 'vue';
 
 const props = defineProps<{ category: string }>();
 const app = useAppStore();
 const router: Router = useRouter();
 
+const { currentCategory, articles } = storeToRefs(app);
+
 app.loadArticles(props.category);
+
+watch(props, (a, b) => {
+  app.loadArticles(a.category);
+});
 
 function onArticleClicked(article: string) {
   router.push({ name: 'article', params: { category: props.category, article } });
@@ -32,7 +40,7 @@ const showUploadDialog = ref<boolean>(false);
 <template>
   <header class="category-header">
     <v-btn icon="mdi-arrow-left" @click="onBackClicked" variant="plain"></v-btn>
-    <h1 class="view-title">{{ app.currentCategory?.title ?? 'unknown category' }}</h1>
+    <h1 class="view-title">{{ currentCategory?.title ?? 'unknown category' }}</h1>
     <span class="header-spacer"></span>
   </header>
   <div class="ui-action-container">
@@ -41,7 +49,7 @@ const showUploadDialog = ref<boolean>(false);
       <v-dialog activator="parent" v-model="showUploadDialog">
         <article-upload-dialog
           :selectable-categories="app.categories"
-          :default-category="app.currentCategory!"
+          :default-category="currentCategory!"
           @complete="onArticleUpload"
           @close="showUploadDialog = false"
         ></article-upload-dialog>
@@ -51,7 +59,7 @@ const showUploadDialog = ref<boolean>(false);
   </div>
   <div class="card-container">
     <giannitsa-card
-      v-for="(a, i) in app.articles"
+      v-for="(a, i) in articles"
       :title="a.title!"
       :text="a.description ?? ''"
       @click="onArticleClicked(a.code!)"
