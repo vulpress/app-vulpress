@@ -332,6 +332,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+    delete:
+      summary: Delete an article
+      description: |
+        ...
+      tags:
+        - Article
+      operationId: deleteArticle
+      parameters:
+        - in: path
+          name: article
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not found
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /articles:
+    post:
+      summary: Moves an article
+      description: |
+        ...
+      tags:
+        - Article
+      operationId: moveArticle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleMoveRequest'
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not found
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
 
 components:
   schemas:
@@ -414,7 +462,16 @@ components:
         image:
           type: string
           format: uuid
-          
+
+    ArticleMoveRequest:
+      type: object
+      properties:
+        article:
+          type: string
+        targetCategory:
+          type: string
+      required: [ article, targetCategory ]
+
     AppBarModel:
       type: object
       properties:
@@ -427,7 +484,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UiAction'
-      
+
     UiAction:
       type: object
       properties:

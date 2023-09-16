@@ -2,6 +2,7 @@ package hu.aestallon.giannitsa.app.rest.api;
 
 import hu.aestallon.giannitsa.app.rest.model.ApiError;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
+import hu.aestallon.giannitsa.app.rest.model.ArticleMoveRequest;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

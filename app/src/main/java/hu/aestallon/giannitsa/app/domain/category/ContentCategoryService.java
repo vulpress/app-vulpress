@@ -100,4 +100,8 @@ public interface ContentCategoryService {
 
   ArticleDetail getArticle(String articleCode);
 
+  void deleteArticle(String articleCode);
+
+  void moveArticle(String articleCode, String targetCategory);
+
 }
