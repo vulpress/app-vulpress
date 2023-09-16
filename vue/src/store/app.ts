@@ -56,7 +56,15 @@ export const useAppStore = defineStore('app', () => {
     }
 
     articles.value = result;
-    currentCategory.value = categories.value.find((c) => c.code === category);
+    if (category === 'sys_archive') {
+      // TODO: remove this branching here!
+      currentCategory.value = {
+        code: 'sys_archive',
+        title: 'Archive',
+      };
+    } else {
+      currentCategory.value = categories.value.find((c) => c.code === category);
+    }
   }
 
   function isError(value: any | ApiError): value is ApiError {
