@@ -3,12 +3,18 @@ package hu.aestallon.giannitsa.app.domain.category;
 import hu.aestallon.giannitsa.app.auth.UserService;
 import hu.aestallon.giannitsa.app.domain.ConstraintViolationException;
 import hu.aestallon.giannitsa.app.domain.ForbiddenOperationException;
+import hu.aestallon.giannitsa.app.domain.article.Article;
 import hu.aestallon.giannitsa.app.domain.article.ArticleRepository;
 import hu.aestallon.giannitsa.app.domain.article.ArticleService;
 import hu.aestallon.giannitsa.app.domain.util.StringNormaliser;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 import hu.aestallon.giannitsa.app.rest.model.ArticlePreview;
 import hu.aestallon.giannitsa.app.rest.model.Category;
+import hu.aestallon.giannitsa.app.rest.model.Paragraph;
+import hu.aestallon.giannitsa.docu.importer.DocumentImportResult;
+import hu.aestallon.giannitsa.docu.importer.DocumentImporter;
+import hu.aestallon.giannitsa.docu.model.Document;
+import hu.aestallon.giannitsa.docu.model.Text;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +27,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+
 @Service
 @RequiredArgsConstructor
 public class ContentCategoryServiceImpl implements ContentCategoryService {
@@ -31,6 +40,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
   private final ArticleService            articleService;
   private final ArticleRepository         articleRepository;
   private final ContentCategoryRepository contentCategoryRepository;
+  private final DocumentImporter          wordDocumentImporter;
 
   @Override
   public Stream<Category> getCategories() {
@@ -115,6 +125,69 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
   @Override
   public ArticleDetail uploadArticle(String categoryCode, ArticleDetail articleDetail,
                                      String description, InputStream content) {
-    return null;
+
+    if (!userService.isCurrentUserAdmin()) {
+      throw new ForbiddenOperationException("non admins cannot upload!");
+    }
+
+    final Long categoryId = contentCategoryRepository
+        .findByNormalisedTitle(categoryCode)
+        .map(ContentCategory::id)
+        .orElseThrow(() -> new ConstraintViolationException(
+            "no category known with [ " + categoryCode + " ] !!!"));
+
+    final DocumentImportResult result = wordDocumentImporter.doImport(content);
+    if (result instanceof DocumentImportResult.Ok ok) {
+      return articleService.save(
+          fromDocument(ok.document(), articleDetail),
+          categoryId,
+          description);
+
+    } else if (result instanceof DocumentImportResult.Err err) {
+      if (err.throwable() != null) {
+        throw new IllegalStateException(err.throwable());
+
+      } else {
+        throw new ForbiddenOperationException(err.errorCode());
+
+      }
+
+    } else {
+      throw new AssertionError();
+    }
   }
+
+  @Override
+  public ArticleDetail getArticle(String articleCode) {
+    final Article article = articleRepository
+        .findByNormalisedTitle(Objects.requireNonNull(articleCode))
+        .orElseThrow(() -> new IllegalArgumentException(articleCode + " is unknown!"));
+
+    final boolean categoryUnavailable =  contentCategoryRepository
+        .findById(article.contentCategory().getId())
+        .filter(this::isCategoryPermitted)
+        .isEmpty();
+    if (categoryUnavailable) {
+      throw new ForbiddenOperationException(articleCode + " is not in an available category!");
+    }
+
+    return article.toDetail();
+  }
+
+  private boolean isCategoryPermitted(ContentCategory category) {
+    return category != null && (category.publiclyVisible() || userService.isCurrentUserAdmin());
+  }
+
+  private static ArticleDetail fromDocument(Document document, ArticleDetail articleDetail) {
+    final List<Paragraph> paragraphs = document.content().stream()
+        .filter(Text.class::isInstance)
+        .map(Text.class::cast)
+        .map(Text::content)
+        .peek(System.out::println)
+        .map(s -> new Paragraph().text(s))
+        .peek(System.out::println)
+        .toList();
+    return articleDetail.paragraphs(paragraphs);
+  }
+
 }

@@ -38,6 +38,8 @@ dependencies {
   implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
   implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
 
+  implementation project(':giannitsa-mod-document')
+
   compileOnly 'org.projectlombok:lombok'
   compileOnly 'org.springframework.boot:spring-boot-devtools'
 

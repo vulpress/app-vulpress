@@ -1,4 +1,5 @@
-import { ApiError, ArticleApi, ArticlePreview, Category } from '@/api/giannitsa';
+import { ApiError, ArticleApi, ArticleDetail, ArticlePreview, Category } from '@/api/giannitsa';
+import ArticleUpload from './article-upload.model';
 
 export default class ArticleService {
   constructor(private articleApi: ArticleApi) {}
@@ -22,5 +23,33 @@ export default class ArticleService {
       (ok) => ok.data,
       (reject) => reject.data as ApiError
     );
+  }
+
+  async uploadArticle(model: ArticleUpload): Promise<ArticleDetail | ApiError> {
+    return await this.articleApi
+      .uploadArticle(
+        model.category.code,
+        model.title,
+        model.issueDate ?? this.getCurrentDateIsoFormatted(),
+        model.author ?? '',
+        model.description ?? '',
+        model.content
+      )
+      .then(
+        (ok) => ok.data,
+        (reject) => reject.data as ApiError
+      );
+  }
+
+  async loadArticle(category: string, article: string): Promise<ArticleDetail | ApiError> {
+    return await this.articleApi.getArticle(article).then(
+      (ok) => ok.data,
+      (reject) => reject.data as ApiError
+    );
+  }
+
+  private getCurrentDateIsoFormatted(): string {
+    const date: string = new Date().toISOString();
+    return date.substring(0, date.indexOf('T'));
   }
 }

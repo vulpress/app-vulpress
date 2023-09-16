@@ -6,7 +6,11 @@ project (':giannitsa-app-server').projectDir = file('app')
 include 'giannitsa-ui-vue'
 project(':giannitsa-ui-vue').projectDir = file('vue')
 
+include 'giannitsa-mod-document'
+project(':giannitsa-mod-document').projectDir = file('docu')
+
 def localSettings = file('local.settings.gradle')
 if (localSettings.exists()) {
   apply from:localSettings
 }
+

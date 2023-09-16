@@ -26,7 +26,7 @@ class AdminCategoryTest {
     List<Category> categories = contentCategoryService.getCategories().toList();
     assertThat(categories)
         .isNotNull()
-        .hasSize(4);
+        .hasSize(3);
   }
 
   @Test
@@ -44,7 +44,7 @@ class AdminCategoryTest {
     List<Category> categories = contentCategoryService.getCategories().toList();
     assertThat(categories)
         .isNotNull()
-        .hasSize(4);
+        .hasSize(3);
 
     final Category category = contentCategoryService.create(new Category()
         .title("Custom Category 1")
@@ -54,7 +54,7 @@ class AdminCategoryTest {
     categories = contentCategoryService.getCategories().toList();
     assertThat(categories)
         .isNotNull()
-        .hasSize(5)
+        .hasSize(4)
         .contains(category);
   }
 

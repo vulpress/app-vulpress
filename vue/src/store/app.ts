@@ -16,14 +16,15 @@
 
 // Utilities
 import { ApiError, AppBarModel, ArticleDetail, ArticlePreview, Category } from '@/api/giannitsa';
+import { articleService, viewService } from '@/services';
+import ArticleUpload from '@/services/article-upload.model';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { articleService, viewService } from '@/services';
-import { computed } from 'vue';
-import { ComputedRef } from 'vue';
-import { ViewName } from './view.constants';
+import { useRouter } from 'vue-router';
 
 export const useAppStore = defineStore('app', () => {
+  const router = useRouter();
+
   const appBarModel = ref<AppBarModel | undefined>();
   const categories = ref<Category[]>([]);
   const articles = ref<ArticlePreview[]>([]);
@@ -41,8 +42,11 @@ export const useAppStore = defineStore('app', () => {
 
     if (!categories.value.some((c) => c.code === currentCategory.value?.code)) {
       currentCategory.value = undefined;
+      router.push({ name: 'main' });
     }
   }
+
+  function currentCategoryChanged() {}
 
   async function loadArticles(category: string) {
     let result: ArticlePreview[] | ApiError = await articleService.articles(category);
@@ -52,32 +56,37 @@ export const useAppStore = defineStore('app', () => {
     }
 
     articles.value = result;
-    currentCategory.value = categories.value.find((c) => c.code === category);
+    if (category === 'sys_archive') {
+      // TODO: remove this branching here!
+      currentCategory.value = {
+        code: 'sys_archive',
+        title: 'Archive',
+      };
+    } else {
+      currentCategory.value = categories.value.find((c) => c.code === category);
+    }
   }
 
   function isError(value: any | ApiError): value is ApiError {
     return (value as ApiError).status !== undefined;
   }
 
-  function loadArticle(category: string, article: string): ArticleDetail | undefined {
-    return {
-      code: article,
-      title: `${article} title`,
-      paragraphs: [
-        {
-          text: 'Lorem ipsum dolor sit amet',
-        },
-        {
-          text: 'Lorem ipsum dolor sit amet',
-        },
-        {
-          text: 'Lorem ipsum dolor sit amet',
-        },
-        {
-          text: 'Lorem ipsum dolor sit amet',
-        },
-      ],
-    };
+  async function uploadArticle(payload: ArticleUpload): Promise<ArticleDetail | ApiError> {
+    let res = await articleService.uploadArticle(payload);
+    if (payload.category.code === currentCategory.value?.code) {
+      loadArticles(currentCategory.value.code);
+    }
+    return res;
+  }
+
+  async function getArticle(category: string, article: string): Promise<ArticleDetail | undefined> {
+    const res = await articleService.loadArticle(category, article);
+    if (isError(res)) {
+      console.log('Article load result: ', res);
+      return undefined;
+    }
+    console.log('Article load result: ', res);
+    return res;
   }
 
   return {
@@ -90,7 +99,8 @@ export const useAppStore = defineStore('app', () => {
     // methods:
     appBarModelChanged,
     loadArticles,
-    loadArticle,
+    uploadArticle,
+    getArticle,
     // computed values:
   };
 });
