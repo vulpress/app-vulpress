@@ -9,6 +9,11 @@ import hu.aestallon.giannitsa.app.domain.util.StringNormaliser;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
 import hu.aestallon.giannitsa.app.rest.model.ArticlePreview;
 import hu.aestallon.giannitsa.app.rest.model.Category;
+import hu.aestallon.giannitsa.app.rest.model.Paragraph;
+import hu.aestallon.giannitsa.docu.importer.DocumentImportResult;
+import hu.aestallon.giannitsa.docu.importer.DocumentImporter;
+import hu.aestallon.giannitsa.docu.model.Document;
+import hu.aestallon.giannitsa.docu.model.Text;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +24,11 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +40,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
   private final ArticleService            articleService;
   private final ArticleRepository         articleRepository;
   private final ContentCategoryRepository contentCategoryRepository;
+  private final DocumentImporter          wordDocumentImporter;
 
   @Override
   public Stream<Category> getCategories() {
@@ -115,6 +125,45 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
   @Override
   public ArticleDetail uploadArticle(String categoryCode, ArticleDetail articleDetail,
                                      String description, InputStream content) {
-    return null;
+
+    if (!userService.isCurrentUserAdmin()) {
+      throw new ForbiddenOperationException("non admins cannot upload!");
+    }
+
+    final Long categoryId = contentCategoryRepository
+        .findByNormalisedTitle(categoryCode)
+        .map(ContentCategory::id)
+        .orElseThrow(() -> new ConstraintViolationException(
+            "no category known with [ " + categoryCode + " ] !!!"));
+
+    final DocumentImportResult result = wordDocumentImporter.doImport(content);
+    if (result instanceof DocumentImportResult.Ok ok) {
+      return articleService.save(
+          fromDocument(ok.document(), articleDetail),
+          categoryId,
+          description);
+
+    } else if (result instanceof DocumentImportResult.Err err) {
+      if (err.throwable() != null) {
+        throw new IllegalStateException(err.throwable());
+
+      } else {
+        throw new ForbiddenOperationException(err.errorCode());
+
+      }
+
+    } else {
+      throw new AssertionError();
+    }
   }
+
+  private static ArticleDetail fromDocument(Document document, ArticleDetail articleDetail) {
+    return document.content().stream()
+        .filter(Text.class::isInstance)
+        .map(Text.class::cast)
+        .map(Text::content)
+        .map(new Paragraph()::text)
+        .collect(collectingAndThen(toList(), articleDetail::paragraphs));
+  }
+
 }
