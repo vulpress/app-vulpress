@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { useAppStore } from '@/store/app';
-import { onMounted } from 'vue';
 import { Router, useRouter } from 'vue-router';
+import { ref } from 'vue';
+
 import GiannitsaCard from '@/components/GiannitsaCard.vue';
+import ArticleUploadDialog from '@/components/ArticleUploadDialog.vue';
+import ArticleUpload from '@/services/article-upload.model';
 
 const props = defineProps<{ category: string }>();
 const app = useAppStore();
@@ -17,6 +20,13 @@ function onArticleClicked(article: string) {
 function onBackClicked() {
   router.push({ name: 'main' });
 }
+
+async function onArticleUpload(payload: ArticleUpload) {
+  await app.uploadArticle(payload);
+  showUploadDialog.value = false;
+}
+
+const showUploadDialog = ref<boolean>(false);
 </script>
 
 <template>
@@ -26,7 +36,17 @@ function onBackClicked() {
     <span class="header-spacer"></span>
   </header>
   <div class="ui-action-container">
-    <v-btn color="primary" class="ui-action">Upload</v-btn>
+    <v-btn color="primary" class="ui-action">
+      Upload
+      <v-dialog activator="parent" v-model="showUploadDialog">
+        <article-upload-dialog
+          :selectable-categories="app.categories"
+          :default-category="app.currentCategory!"
+          @complete="onArticleUpload"
+          @close="showUploadDialog = false"
+        ></article-upload-dialog>
+      </v-dialog>
+    </v-btn>
     <v-btn color="warn" class="ui-action">Delete</v-btn>
   </div>
   <div class="card-container">

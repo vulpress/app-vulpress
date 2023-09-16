@@ -22,6 +22,7 @@ import { articleService, viewService } from '@/services';
 import { computed } from 'vue';
 import { ComputedRef } from 'vue';
 import { ViewName } from './view.constants';
+import ArticleUpload from '@/services/article-upload.model';
 
 export const useAppStore = defineStore('app', () => {
   const appBarModel = ref<AppBarModel | undefined>();
@@ -59,25 +60,22 @@ export const useAppStore = defineStore('app', () => {
     return (value as ApiError).status !== undefined;
   }
 
-  function loadArticle(category: string, article: string): ArticleDetail | undefined {
-    return {
-      code: article,
-      title: `${article} title`,
-      paragraphs: [
-        {
-          text: 'Lorem ipsum dolor sit amet',
-        },
-        {
-          text: 'Lorem ipsum dolor sit amet',
-        },
-        {
-          text: 'Lorem ipsum dolor sit amet',
-        },
-        {
-          text: 'Lorem ipsum dolor sit amet',
-        },
-      ],
-    };
+  async function uploadArticle(payload: ArticleUpload): Promise<ArticleDetail | ApiError> {
+    let res = await articleService.uploadArticle(payload);
+    if (payload.category.code === currentCategory.value?.code) {
+      loadArticles(currentCategory.value.code);
+    }
+    return res;
+  }
+
+  async function getArticle(category: string, article: string): Promise<ArticleDetail | undefined> {
+    const res = await articleService.loadArticle(category, article);
+    if (isError(res)) {
+      console.log('Article load result: ', res);
+      return undefined;
+    }
+    console.log('Article load result: ', res);
+    return res;
   }
 
   return {
@@ -90,7 +88,8 @@ export const useAppStore = defineStore('app', () => {
     // methods:
     appBarModelChanged,
     loadArticles,
-    loadArticle,
+    uploadArticle,
+    getArticle,
     // computed values:
   };
 });
