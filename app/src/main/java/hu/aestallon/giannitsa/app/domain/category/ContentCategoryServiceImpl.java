@@ -108,11 +108,13 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 
     final ContentCategory archive = contentCategoryRepository.archive();
     articleRepository.moveAllArticles(contentCategory.id(), archive.id());
+    contentCategoryRepository.deleteById(contentCategory.id());
   }
 
 
   @Override
   public List<ArticlePreview> articlesOf(String categoryCode) {
+    // TODO: Check visibility! Check existence!
     return Streamable
         .of(articleRepository.findArticlesOfCategory(categoryCode)).stream()
         .map(a -> new ArticlePreview()
@@ -190,4 +192,31 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
     return articleDetail.paragraphs(paragraphs);
   }
 
+  @Override
+  public void deleteArticle(String articleCode) {
+    if (!userService.isCurrentUserAdmin()) {
+      throw new ForbiddenOperationException("Only administrators can delete an article!");
+    }
+
+    Objects.requireNonNull(articleCode, "articleCode cannot be null!");
+
+    ContentCategory archive = contentCategoryRepository.archive();
+    articleRepository.moveArticle(articleCode, archive.id());
+  }
+
+  @Override
+  public void moveArticle(String articleCode, String targetCategory) {
+    if (!userService.isCurrentUserAdmin()) {
+      throw new ForbiddenOperationException("Only administrators can move an article!");
+    }
+
+    Objects.requireNonNull(articleCode, "articleCode cannot be null!");
+    Objects.requireNonNull(targetCategory, "targetCategory cannot be null!");
+
+    final ContentCategory target = contentCategoryRepository
+        .findByNormalisedTitle(targetCategory)
+        .orElseThrow(() -> new ConstraintViolationException(
+            "[%s] category does not exist!".formatted(targetCategory)));
+    articleRepository.moveArticle(articleCode, target.id());
+  }
 }

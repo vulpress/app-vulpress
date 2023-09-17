@@ -41,6 +41,7 @@ public interface ViewApi {
      * Returns the UiActions (usually represented as buttons) for a given view. 
      *
      * @param viewName  (required)
+     * @param pageName  (optional)
      * @return Ok (status code 200)
      *         or Unknown view name (status code 404)
      */
@@ -61,9 +62,10 @@ public interface ViewApi {
         produces = { "application/json" }
     )
     default ResponseEntity<List<UiAction>> getActions(
-        @Parameter(name = "viewName", description = "", required = true) @PathVariable("viewName") String viewName
+        @Parameter(name = "viewName", description = "", required = true) @PathVariable("viewName") String viewName,
+        @Parameter(name = "pageName", description = "") @Valid @RequestParam(value = "pageName", required = false) Optional<String> pageName
     ) {
-        return getDelegate().getActions(viewName);
+        return getDelegate().getActions(viewName, pageName);
     }
 
 

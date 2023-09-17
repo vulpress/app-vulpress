@@ -1,4 +1,4 @@
-package hu.aestallon.giannitsa.app.test.domain.admin;
+package hu.aestallon.giannitsa.app.test.domain;
 
 import hu.aestallon.giannitsa.app.config.BusinessLogicTest;
 import hu.aestallon.giannitsa.app.domain.category.ContentCategoryService;

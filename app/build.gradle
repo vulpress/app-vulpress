@@ -76,9 +76,9 @@ tasks.register(processFrontendResourcesTask, Copy) {
   into appResourcesDir
 }
 
-//tasks.named('processResources') {
-//  dependsOn tasks.named(processFrontendResourcesTask)
-//}
+tasks.named('processResources') {
+  dependsOn tasks.named(processFrontendResourcesTask)
+}
 
 openApiGenerate {
   generatorName = "spring"

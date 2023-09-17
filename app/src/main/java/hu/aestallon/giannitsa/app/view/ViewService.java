@@ -8,6 +8,6 @@ public interface ViewService {
 
   String name();
 
-  List<UiAction> actions();
+  List<UiAction> actions(String identifier);
 
 }

@@ -2,6 +2,7 @@ package hu.aestallon.giannitsa.app.rest.api;
 
 import hu.aestallon.giannitsa.app.rest.model.ApiError;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
+import hu.aestallon.giannitsa.app.rest.model.ArticleMoveRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,21 @@ public interface ArticlesApiDelegate {
     }
 
     /**
+     * DELETE /articles/{article} : Delete an article
+     * ... 
+     *
+     * @param article  (required)
+     * @return Ok (status code 200)
+     *         or Not found (status code 404)
+     *         or Unauthorized (status code 401)
+     * @see ArticlesApi#deleteArticle
+     */
+    default ResponseEntity<Void> deleteArticle(String article) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * GET /articles/{article} : Load the contents of an article
      * ... 
      *
@@ -44,6 +60,21 @@ public interface ArticlesApiDelegate {
                 }
             }
         });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * POST /articles : Moves an article
+     * ... 
+     *
+     * @param articleMoveRequest  (optional)
+     * @return Ok (status code 200)
+     *         or Not found (status code 404)
+     *         or Unauthorized (status code 401)
+     * @see ArticlesApi#moveArticle
+     */
+    default ResponseEntity<Void> moveArticle(ArticleMoveRequest articleMoveRequest) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

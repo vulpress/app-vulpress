@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-import { AppBarModel } from '@/api/giannitsa';
+import LoginDialog from '@/components/LoginDialog.vue';
+import { authService } from '@/services';
 import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
-import { Ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import LoginDialog from '@/components/LoginDialog.vue';
-import { ref } from 'vue';
-import { authService } from '@/services';
 
 interface LoginAction {
   code: string;

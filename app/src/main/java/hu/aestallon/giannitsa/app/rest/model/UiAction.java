@@ -33,6 +33,9 @@ public class UiAction {
   @JsonProperty("icon")
   private String icon;
 
+  @JsonProperty("disabled")
+  private Boolean disabled = false;
+
   public UiAction code(String code) {
     this.code = code;
     return this;
@@ -109,6 +112,25 @@ public class UiAction {
     this.icon = icon;
   }
 
+  public UiAction disabled(Boolean disabled) {
+    this.disabled = disabled;
+    return this;
+  }
+
+  /**
+   * Get disabled
+   * @return disabled
+  */
+  @NotNull 
+  @Schema(name = "disabled", required = true)
+  public Boolean getDisabled() {
+    return disabled;
+  }
+
+  public void setDisabled(Boolean disabled) {
+    this.disabled = disabled;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -121,12 +143,13 @@ public class UiAction {
     return Objects.equals(this.code, uiAction.code) &&
         Objects.equals(this.title, uiAction.title) &&
         Objects.equals(this.colour, uiAction.colour) &&
-        Objects.equals(this.icon, uiAction.icon);
+        Objects.equals(this.icon, uiAction.icon) &&
+        Objects.equals(this.disabled, uiAction.disabled);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, title, colour, icon);
+    return Objects.hash(code, title, colour, icon, disabled);
   }
 
   @Override
@@ -137,6 +160,7 @@ public class UiAction {
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    colour: ").append(toIndentedString(colour)).append("\n");
     sb.append("    icon: ").append(toIndentedString(icon)).append("\n");
+    sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
     sb.append("}");
     return sb.toString();
   }

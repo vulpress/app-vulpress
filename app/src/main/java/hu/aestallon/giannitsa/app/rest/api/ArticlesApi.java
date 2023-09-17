@@ -7,6 +7,7 @@ package hu.aestallon.giannitsa.app.rest.api;
 
 import hu.aestallon.giannitsa.app.rest.model.ApiError;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
+import hu.aestallon.giannitsa.app.rest.model.ArticleMoveRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -35,6 +36,39 @@ public interface ArticlesApi {
     default ArticlesApiDelegate getDelegate() {
         return new ArticlesApiDelegate() {};
     }
+
+    /**
+     * DELETE /articles/{article} : Delete an article
+     * ... 
+     *
+     * @param article  (required)
+     * @return Ok (status code 200)
+     *         or Not found (status code 404)
+     *         or Unauthorized (status code 401)
+     */
+    @Operation(
+        operationId = "deleteArticle",
+        summary = "Delete an article",
+        tags = { "Article" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/articles/{article}",
+        produces = { "application/json" }
+    )
+    default ResponseEntity<Void> deleteArticle(
+        @Parameter(name = "article", description = "", required = true) @PathVariable("article") String article
+    ) {
+        return getDelegate().deleteArticle(article);
+    }
+
 
     /**
      * GET /articles/{article} : Load the contents of an article
@@ -68,6 +102,40 @@ public interface ArticlesApi {
         @Parameter(name = "article", description = "", required = true) @PathVariable("article") String article
     ) {
         return getDelegate().getArticle(article);
+    }
+
+
+    /**
+     * POST /articles : Moves an article
+     * ... 
+     *
+     * @param articleMoveRequest  (optional)
+     * @return Ok (status code 200)
+     *         or Not found (status code 404)
+     *         or Unauthorized (status code 401)
+     */
+    @Operation(
+        operationId = "moveArticle",
+        summary = "Moves an article",
+        tags = { "Article" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/articles",
+        produces = { "application/json" },
+        consumes = { "application/json" }
+    )
+    default ResponseEntity<Void> moveArticle(
+        @Parameter(name = "ArticleMoveRequest", description = "") @Valid @RequestBody(required = false) ArticleMoveRequest articleMoveRequest
+    ) {
+        return getDelegate().moveArticle(articleMoveRequest);
     }
 
 }

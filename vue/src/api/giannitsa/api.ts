@@ -119,6 +119,25 @@ export interface ArticleDetail {
 /**
  * 
  * @export
+ * @interface ArticleMoveRequest
+ */
+export interface ArticleMoveRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ArticleMoveRequest
+     */
+    'article': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ArticleMoveRequest
+     */
+    'targetCategory': string;
+}
+/**
+ * 
+ * @export
  * @interface ArticlePreview
  */
 export interface ArticlePreview {
@@ -259,6 +278,12 @@ export interface UiAction {
      * @memberof UiAction
      */
     'icon'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UiAction
+     */
+    'disabled': boolean;
 }
 
 /**
@@ -295,6 +320,40 @@ export const ArticleApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(category, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * ... 
+         * @summary Delete an article
+         * @param {string} article 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteArticle: async (article: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'article' is not null or undefined
+            assertParamExists('deleteArticle', 'article', article)
+            const localVarPath = `/articles/{article}`
+                .replace(`{${"article"}}`, encodeURIComponent(String(article)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -473,6 +532,40 @@ export const ArticleApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * ... 
+         * @summary Moves an article
+         * @param {ArticleMoveRequest} [articleMoveRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        moveArticle: async (articleMoveRequest?: ArticleMoveRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/articles`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(articleMoveRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * ... 
          * @summary Creates a new article in this category
          * @param {string} category 
          * @param {string} title The desired title of the article 
@@ -566,6 +659,17 @@ export const ArticleApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * ... 
+         * @summary Delete an article
+         * @param {string} article 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteArticle(article: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteArticle(article, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Deletes a category, moving its contents to the archived category. The archived category may not be deleted. 
          * @summary Delete a category
          * @param {string} category 
@@ -622,6 +726,17 @@ export const ArticleApiFp = function(configuration?: Configuration) {
         },
         /**
          * ... 
+         * @summary Moves an article
+         * @param {ArticleMoveRequest} [articleMoveRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async moveArticle(articleMoveRequest?: ArticleMoveRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.moveArticle(articleMoveRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * ... 
          * @summary Creates a new article in this category
          * @param {string} category 
          * @param {string} title The desired title of the article 
@@ -655,6 +770,16 @@ export const ArticleApiFactory = function (configuration?: Configuration, basePa
          */
         createCategory(category?: Category, options?: any): AxiosPromise<Category> {
             return localVarFp.createCategory(category, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * ... 
+         * @summary Delete an article
+         * @param {string} article 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteArticle(article: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteArticle(article, options).then((request) => request(axios, basePath));
         },
         /**
          * Deletes a category, moving its contents to the archived category. The archived category may not be deleted. 
@@ -708,6 +833,16 @@ export const ArticleApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * ... 
+         * @summary Moves an article
+         * @param {ArticleMoveRequest} [articleMoveRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        moveArticle(articleMoveRequest?: ArticleMoveRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.moveArticle(articleMoveRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * ... 
          * @summary Creates a new article in this category
          * @param {string} category 
          * @param {string} title The desired title of the article 
@@ -741,6 +876,18 @@ export class ArticleApi extends BaseAPI {
      */
     public createCategory(category?: Category, options?: AxiosRequestConfig) {
         return ArticleApiFp(this.configuration).createCategory(category, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * ... 
+     * @summary Delete an article
+     * @param {string} article 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleApi
+     */
+    public deleteArticle(article: string, options?: AxiosRequestConfig) {
+        return ArticleApiFp(this.configuration).deleteArticle(article, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -801,6 +948,18 @@ export class ArticleApi extends BaseAPI {
      */
     public listCategories(options?: AxiosRequestConfig) {
         return ArticleApiFp(this.configuration).listCategories(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * ... 
+     * @summary Moves an article
+     * @param {ArticleMoveRequest} [articleMoveRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleApi
+     */
+    public moveArticle(articleMoveRequest?: ArticleMoveRequest, options?: AxiosRequestConfig) {
+        return ArticleApiFp(this.configuration).moveArticle(articleMoveRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -999,10 +1158,11 @@ export const ViewApiAxiosParamCreator = function (configuration?: Configuration)
          * Returns the UiActions (usually represented as buttons) for a given view. 
          * @summary Returns the available actions for a given view.
          * @param {string} viewName 
+         * @param {string} [pageName] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getActions: async (viewName: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getActions: async (viewName: string, pageName?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'viewName' is not null or undefined
             assertParamExists('getActions', 'viewName', viewName)
             const localVarPath = `/view/{viewName}/actions`
@@ -1017,6 +1177,10 @@ export const ViewApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (pageName !== undefined) {
+                localVarQueryParameter['pageName'] = pageName;
+            }
 
 
     
@@ -1073,11 +1237,12 @@ export const ViewApiFp = function(configuration?: Configuration) {
          * Returns the UiActions (usually represented as buttons) for a given view. 
          * @summary Returns the available actions for a given view.
          * @param {string} viewName 
+         * @param {string} [pageName] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getActions(viewName: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UiAction>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getActions(viewName, options);
+        async getActions(viewName: string, pageName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UiAction>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getActions(viewName, pageName, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1104,11 +1269,12 @@ export const ViewApiFactory = function (configuration?: Configuration, basePath?
          * Returns the UiActions (usually represented as buttons) for a given view. 
          * @summary Returns the available actions for a given view.
          * @param {string} viewName 
+         * @param {string} [pageName] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getActions(viewName: string, options?: any): AxiosPromise<Array<UiAction>> {
-            return localVarFp.getActions(viewName, options).then((request) => request(axios, basePath));
+        getActions(viewName: string, pageName?: string, options?: any): AxiosPromise<Array<UiAction>> {
+            return localVarFp.getActions(viewName, pageName, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns the state of the app bar, including the title of the application, the logged-in status (for rendering the profile drop-down menu), and the available UiActions in the hamburger menu. 
@@ -1133,12 +1299,13 @@ export class ViewApi extends BaseAPI {
      * Returns the UiActions (usually represented as buttons) for a given view. 
      * @summary Returns the available actions for a given view.
      * @param {string} viewName 
+     * @param {string} [pageName] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ViewApi
      */
-    public getActions(viewName: string, options?: AxiosRequestConfig) {
-        return ViewApiFp(this.configuration).getActions(viewName, options).then((request) => request(this.axios, this.basePath));
+    public getActions(viewName: string, pageName?: string, options?: AxiosRequestConfig) {
+        return ViewApiFp(this.configuration).getActions(viewName, pageName, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

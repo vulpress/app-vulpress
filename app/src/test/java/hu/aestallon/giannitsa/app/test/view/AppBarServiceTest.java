@@ -1,4 +1,4 @@
-package hu.aestallon.giannitsa.app.test.view.anon;
+package hu.aestallon.giannitsa.app.test.view;
 
 import hu.aestallon.giannitsa.app.config.BusinessLogicTest;
 import hu.aestallon.giannitsa.app.rest.model.AppBarModel;

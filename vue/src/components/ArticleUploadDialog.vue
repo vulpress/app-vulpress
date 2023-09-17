@@ -59,6 +59,7 @@ function onSubmitClicked() {
         item-title="title"
         item-value="code"
         :items="props.selectableCategories"
+        return-object
       ></v-select>
       <v-text-field
         type="text"
