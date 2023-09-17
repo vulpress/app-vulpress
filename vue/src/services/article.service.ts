@@ -52,4 +52,11 @@ export default class ArticleService {
     const date: string = new Date().toISOString();
     return date.substring(0, date.indexOf('T'));
   }
+
+  async deleteCategory(category: string): Promise<boolean> {
+    return await this.articleApi.deleteCategory(category).then(
+      (ok) => true,
+      (reject) => false
+    );
+  }
 }

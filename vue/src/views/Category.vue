@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { useAppStore } from '@/store/app';
+import { ref } from 'vue';
 import { Router, useRouter } from 'vue-router';
-import { onMounted, ref } from 'vue';
 
-import GiannitsaCard from '@/components/GiannitsaCard.vue';
+import { UiAction } from '@/api/giannitsa';
 import ArticleUploadDialog from '@/components/ArticleUploadDialog.vue';
-import ArticleUpload from '@/services/article-upload.model';
-import { storeToRefs } from 'pinia';
-import { watch } from 'vue';
+import GiannitsaCard from '@/components/GiannitsaCard.vue';
 import { viewService } from '@/services';
+import ArticleUpload from '@/services/article-upload.model';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { ViewName } from '@/store/view.constants';
-import { computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed, watch } from 'vue';
 
 const props = defineProps<{ category: string }>();
 const app = useAppStore();
@@ -19,26 +20,31 @@ const router: Router = useRouter();
 const { appBarModel, currentCategory, articles } = storeToRefs(app);
 
 // state init
-const actions = ref<string[]>([]);
+const actions = ref<UiAction[]>([]);
 
 app.loadArticles(props.category);
-refreshActions();
+refreshActions(props.category);
 watch(props, (a, b) => {
   app.loadArticles(a.category);
-  refreshActions();
+  refreshActions(a.category);
 });
 watch(appBarModel, async (a, b) => {
-  refreshActions();
+  refreshActions(props.category);
 });
 
-async function refreshActions() {
-  actions.value = (await viewService.actions(ViewName.CATEGORY)).map((a) => a.code);
+async function refreshActions(categoryCode: string) {
+  actions.value = await viewService.actions(ViewName.CATEGORY, categoryCode);
 }
 
 // action conditions
-const showUploadAction = computed<boolean>(() => actions.value.some((a) => 'upload-article' === a));
+const showUploadAction = computed<boolean>(() =>
+  actions.value.some((a) => 'upload-article' === a.code)
+);
 const showDeleteAction = computed<boolean>(() =>
-  actions.value.some((a) => 'delete-category' === a)
+  actions.value.some((a) => 'delete-category' === a.code)
+);
+const disabledDelete = computed<boolean>(
+  () => actions.value.find((a) => a.code === 'delete-category')?.disabled ?? true
 );
 // event handlers
 function onArticleClicked(article: string) {
@@ -54,7 +60,13 @@ async function onArticleUpload(payload: ArticleUpload) {
   showUploadDialog.value = false;
 }
 
+async function onCategoryDeleted() {
+  showDeleteDialog.value = false;
+  app.deleteCategory(props.category);
+}
+
 const showUploadDialog = ref<boolean>(false);
+const showDeleteDialog = ref<boolean>(false);
 </script>
 
 <template>
@@ -75,7 +87,17 @@ const showUploadDialog = ref<boolean>(false);
         ></article-upload-dialog>
       </v-dialog>
     </v-btn>
-    <v-btn v-if="showDeleteAction" color="warn" class="ui-action">Delete</v-btn>
+    <v-btn v-if="showDeleteAction" color="warn" class="ui-action" :disabled="disabledDelete">
+      Delete
+      <v-dialog activator="parent" v-model="showDeleteDialog">
+        <confirm-dialog
+          title="Delete category"
+          text="All elements in this category will be moved to the archive!"
+          @no="showDeleteDialog = false"
+          @yes="onCategoryDeleted"
+        ></confirm-dialog>
+      </v-dialog>
+    </v-btn>
   </div>
   <div class="card-container">
     <giannitsa-card

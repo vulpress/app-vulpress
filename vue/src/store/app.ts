@@ -46,7 +46,12 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
-  function currentCategoryChanged() {}
+  async function deleteCategory(category: string) {
+    const res = await articleService.deleteCategory(category);
+    if (res) {
+      appBarModelChanged();
+    }
+  }
 
   async function loadArticles(category: string) {
     let result: ArticlePreview[] | ApiError = await articleService.articles(category);
@@ -101,6 +106,7 @@ export const useAppStore = defineStore('app', () => {
     loadArticles,
     uploadArticle,
     getArticle,
+    deleteCategory,
     // computed values:
   };
 });
