@@ -91,6 +91,11 @@ paths:
           schema:
             type: string
           required: true
+        - in: query
+          name: pageName
+          schema:
+            type: string
+          required: false
       responses:
         '200':
           description: Ok
@@ -496,7 +501,10 @@ components:
           type: string
         icon:
           type: string
-      required: [ code, title ]
+        disabled:
+          type: boolean
+          default: false
+      required: [ code, title, disabled ]
 
     ApiError:
       type: object

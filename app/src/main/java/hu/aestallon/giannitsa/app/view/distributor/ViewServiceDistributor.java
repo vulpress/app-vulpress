@@ -5,7 +5,6 @@ import hu.aestallon.giannitsa.app.view.ViewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,14 +28,17 @@ public class ViewServiceDistributor implements InitializingBean {
             .collect(Collectors.toMap(ViewService::name, Function.identity()));
   }
 
-  public List<UiAction> actions(String viewName) throws UnknownViewNameException {
+  public List<UiAction> actions(String viewName, String pageName) throws UnknownViewNameException {
     return Optional
         .ofNullable(viewServicesByName.get(viewName))
-        .map(ViewService::actions)
+        .map(service -> service.actions(pageName))
         .orElseThrow(UnknownViewNameException::new);
   }
 
-  public static final class UnknownViewNameException extends Exception {
-
+  public List<UiAction> actions(String viewName) throws UnknownViewNameException {
+    return actions(viewName, null);
   }
+
+  public static final class UnknownViewNameException extends Exception {}
+
 }

@@ -7,7 +7,7 @@ export default class ViewService {
     return (await this.viewApi.getAppBar()).data;
   }
 
-  async actions(viewName: string): Promise<UiAction[]> {
-    return (await this.viewApi.getActions(viewName)).data;
+  async actions(viewName: string, pageName?: string): Promise<UiAction[]> {
+    return (await this.viewApi.getActions(viewName, pageName)).data;
   }
 }

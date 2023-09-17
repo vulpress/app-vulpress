@@ -22,7 +22,7 @@ public class MainViewService implements ViewService {
   }
 
   @Override
-  public List<UiAction> actions() {
+  public List<UiAction> actions(String identifier) {
     return (userService.isCurrentUserAdmin())
         ? List.of(
         new UiAction())

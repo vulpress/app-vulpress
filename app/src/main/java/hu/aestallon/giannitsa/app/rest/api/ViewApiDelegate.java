@@ -29,15 +29,17 @@ public interface ViewApiDelegate {
      * Returns the UiActions (usually represented as buttons) for a given view. 
      *
      * @param viewName  (required)
+     * @param pageName  (optional)
      * @return Ok (status code 200)
      *         or Unknown view name (status code 404)
      * @see ViewApi#getActions
      */
-    default ResponseEntity<List<UiAction>> getActions(String viewName) {
+    default ResponseEntity<List<UiAction>> getActions(String viewName,
+        Optional<String> pageName) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"colour\" : \"colour\", \"code\" : \"code\", \"icon\" : \"icon\", \"title\" : \"title\" }";
+                    String exampleString = "{ \"colour\" : \"colour\", \"code\" : \"code\", \"icon\" : \"icon\", \"disabled\" : false, \"title\" : \"title\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -58,7 +60,7 @@ public interface ViewApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"availableCategories\" : [ { \"colour\" : \"colour\", \"code\" : \"code\", \"icon\" : \"icon\", \"title\" : \"title\" }, { \"colour\" : \"colour\", \"code\" : \"code\", \"icon\" : \"icon\", \"title\" : \"title\" } ], \"appName\" : \"appName\", \"loggedIn\" : false }";
+                    String exampleString = "{ \"availableCategories\" : [ { \"colour\" : \"colour\", \"code\" : \"code\", \"icon\" : \"icon\", \"disabled\" : false, \"title\" : \"title\" }, { \"colour\" : \"colour\", \"code\" : \"code\", \"icon\" : \"icon\", \"disabled\" : false, \"title\" : \"title\" } ], \"appName\" : \"appName\", \"loggedIn\" : false }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

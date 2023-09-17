@@ -28,7 +28,7 @@ public class AppBarService implements ViewService {
   }
 
   @Override
-  public List<UiAction> actions() {
+  public List<UiAction> actions(String identifier) {
     return contentCategoryService.getCategories()
         .map(c -> new UiAction()
             .code(c.getCode())
@@ -40,7 +40,7 @@ public class AppBarService implements ViewService {
     return new AppBarModel()
         .appName(appName)
         .loggedIn(userService.currentUser() != null)
-        .availableCategories(actions());
+        .availableCategories(actions(null));
   }
 
 }

@@ -26,7 +26,7 @@ import { fileURLToPath, URL } from 'node:url';
 export default defineConfig({
   build: {
     //emptyOutDir: true,
-    // outDir: '../app/src/main/resources/static',
+    outDir: '../app/src/main/resources/static',
   },
   plugins: [
     vue({

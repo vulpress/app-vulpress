@@ -22,7 +22,7 @@ public class ArticleViewService implements ViewService {
   }
 
   @Override
-  public List<UiAction> actions() {
+  public List<UiAction> actions(String identifier) {
     return (userService.isCurrentUserAdmin())
         ? List.of(new UiAction().code("move-article").title("Move"))
         : Collections.emptyList();

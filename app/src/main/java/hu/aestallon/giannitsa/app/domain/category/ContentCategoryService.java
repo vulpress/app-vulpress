@@ -8,6 +8,7 @@ import hu.aestallon.giannitsa.app.rest.model.Category;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 
@@ -17,6 +18,8 @@ public interface ContentCategoryService {
   String ARCHIVE  = "sys_archive";
   String HOMILIES = "homilies";
   String ARTICLES = "articles";
+
+  Set<String> BUILT_IN_CATEGORIES = Set.of(SANDBOX, ARCHIVE, HOMILIES, ARTICLES);
 
   /**
    * Returns a {@code Stream} of categories available to the current user.
