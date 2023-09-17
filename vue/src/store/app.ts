@@ -94,6 +94,29 @@ export const useAppStore = defineStore('app', () => {
     return res;
   }
 
+  async function moveArticle(article: string, targetCategory: string) {
+    const res: boolean = await articleService.moveArticle(article, targetCategory);
+    if (res) {
+      if (currentCategory.value) {
+        router.push({ name: 'category', params: { category: currentCategory.value.code } });
+      } else {
+        console.log('ERROR');
+      }
+    }
+  }
+
+  async function deleteArticle(article: string) {
+    const res: boolean = await articleService.deleteArticle(article);
+    if (res) {
+      if (currentCategory.value) {
+        // loadArticles(currentCategory.value?.code);
+        router.push({ name: 'category', params: { category: currentCategory.value.code } });
+      } else {
+        console.log('ERROR');
+      }
+    }
+  }
+
   return {
     // refs:
     appBarModel,
@@ -107,6 +130,8 @@ export const useAppStore = defineStore('app', () => {
     uploadArticle,
     getArticle,
     deleteCategory,
+    moveArticle,
+    deleteArticle,
     // computed values:
   };
 });

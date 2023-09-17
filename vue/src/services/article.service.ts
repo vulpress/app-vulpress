@@ -59,4 +59,25 @@ export default class ArticleService {
       (reject) => false
     );
   }
+
+  async moveArticle(article: string, targetCategory: string): Promise<boolean> {
+    console.log('article to move: ', article);
+    console.log('to: ', targetCategory);
+    return await this.articleApi
+      .moveArticle({
+        article,
+        targetCategory,
+      })
+      .then(
+        (ok) => true,
+        (reject) => false
+      );
+  }
+
+  async deleteArticle(article: string): Promise<boolean> {
+    return await this.articleApi.deleteArticle(article).then(
+      (ok) => true,
+      (reject) => false
+    );
+  }
 }
