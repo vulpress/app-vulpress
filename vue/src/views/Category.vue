@@ -87,8 +87,11 @@ const showDeleteDialog = ref<boolean>(false);
         ></article-upload-dialog>
       </v-dialog>
     </v-btn>
-    <v-btn v-if="showDeleteAction" color="warn" class="ui-action" :disabled="disabledDelete">
+    <v-btn v-if="showDeleteAction" color="warning" class="ui-action" :disabled="disabledDelete">
       Delete
+      <template v-slot:append>
+        <v-icon icon="mdi-trash-can-outline" color="primary"></v-icon>
+      </template>
       <v-dialog activator="parent" v-model="showDeleteDialog">
         <confirm-dialog
           title="Delete category"

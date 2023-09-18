@@ -16,8 +16,8 @@ const emit = defineEmits<{
     <v-card-title>{{ props.title }}</v-card-title>
     <v-card-text>{{ props.text }}</v-card-text>
     <v-card-actions>
-      <v-btn class="ui-action" color="background" @click="$emit('no')">Cancel</v-btn>
-      <v-btn class="ui-action" color="warning" @click="$emit('yes')">Ok</v-btn>
+      <v-btn class="ui-action" color="primary" variant="text" @click="$emit('no')">Cancel</v-btn>
+      <v-btn class="ui-action" color="warning" variant="elevated" @click="$emit('yes')">Ok</v-btn>
     </v-card-actions>
   </v-card>
 </template>

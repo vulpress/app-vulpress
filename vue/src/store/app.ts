@@ -30,37 +30,36 @@ export const useAppStore = defineStore('app', () => {
   const articles = ref<ArticlePreview[]>([]);
   const currentCategory = ref<Category | undefined>();
 
-  async function appBarModelChanged() {
+  async function appBarModelChanged(reroute?: boolean) {
     appBarModel.value = await viewService.appBarModel();
     console.log('Refreshed app-bar-model', appBarModel.value);
-    categoriesChanged();
+    categoriesChanged(reroute);
   }
 
-  async function categoriesChanged() {
+  async function categoriesChanged(reroute?: boolean) {
     categories.value = await articleService.categories();
     console.log('Refreshed categories', categories.value);
 
     if (!categories.value.some((c) => c.code === currentCategory.value?.code)) {
-      currentCategory.value = undefined;
-      router.push({ name: 'main' });
+      if (reroute) {
+        currentCategory.value = undefined;
+        toMain();
+      }
     }
   }
 
   async function deleteCategory(category: string) {
     const res = await articleService.deleteCategory(category);
     if (res) {
-      appBarModelChanged();
+      appBarModelChanged(true);
     }
   }
 
   async function loadArticles(category: string) {
-    let result: ArticlePreview[] | ApiError = await articleService.articles(category);
-    if (isError(result)) {
-      console.log(result);
-      return;
+    if (categories.value.length === 0) {
+      categories.value = await articleService.categories();
     }
 
-    articles.value = result;
     if (category === 'sys_archive') {
       // TODO: remove this branching here!
       currentCategory.value = {
@@ -69,11 +68,29 @@ export const useAppStore = defineStore('app', () => {
       };
     } else {
       currentCategory.value = categories.value.find((c) => c.code === category);
+      console.log('found category in load article', currentCategory.value);
     }
+
+    if (!currentCategory.value) {
+      console.log('reverting to main');
+      toMain();
+    }
+
+    let result: ArticlePreview[] | ApiError = await articleService.articles(category);
+    if (isError(result)) {
+      console.log(result);
+      return;
+    }
+
+    articles.value = result;
   }
 
   function isError(value: any | ApiError): value is ApiError {
     return (value as ApiError).status !== undefined;
+  }
+
+  function toMain() {
+    router.push({ name: 'main' });
   }
 
   async function uploadArticle(payload: ArticleUpload): Promise<ArticleDetail | ApiError> {
@@ -88,6 +105,7 @@ export const useAppStore = defineStore('app', () => {
     const res = await articleService.loadArticle(category, article);
     if (isError(res)) {
       console.log('Article load result: ', res);
+      toMain();
       return undefined;
     }
     console.log('Article load result: ', res);
