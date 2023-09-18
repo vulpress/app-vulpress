@@ -57,7 +57,7 @@ async function onNewCategoryCreated(category: Category) {
         <new-category-dialog @complete="onNewCategoryCreated"></new-category-dialog>
       </v-dialog>
     </v-btn>
-    <v-btn color="accent" class="ui-action" @click="onArchiveClicked">Archive</v-btn>
+    <v-btn color="secondary" class="ui-action" @click="onArchiveClicked">Archive</v-btn>
   </div>
   <div class="card-container">
     <giannitsa-card
