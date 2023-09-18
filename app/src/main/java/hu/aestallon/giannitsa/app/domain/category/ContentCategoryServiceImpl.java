@@ -165,7 +165,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
         .findByNormalisedTitle(Objects.requireNonNull(articleCode))
         .orElseThrow(() -> new IllegalArgumentException(articleCode + " is unknown!"));
 
-    final boolean categoryUnavailable =  contentCategoryRepository
+    final boolean categoryUnavailable = contentCategoryRepository
         .findById(article.contentCategory().getId())
         .filter(this::isCategoryPermitted)
         .isEmpty();
@@ -213,6 +213,10 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
     Objects.requireNonNull(articleCode, "articleCode cannot be null!");
     Objects.requireNonNull(targetCategory, "targetCategory cannot be null!");
 
+    if (!articleRepository.existsByNormalisedTitle(articleCode)) {
+      throw new ConstraintViolationException(
+          "[ %s ] article does not exist!".formatted(articleCode));
+    }
     final ContentCategory target = contentCategoryRepository
         .findByNormalisedTitle(targetCategory)
         .orElseThrow(() -> new ConstraintViolationException(
