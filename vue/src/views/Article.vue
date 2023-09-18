@@ -8,6 +8,7 @@ import MoveArticleDialog from '@/components/MoveArticleDialog.vue';
 
 import { ref } from 'vue';
 import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 
 const props = defineProps<{
   category: string;
@@ -15,6 +16,7 @@ const props = defineProps<{
 }>();
 const app = useAppStore();
 const router: Router = useRouter();
+const { currentCategory, categories } = storeToRefs(app);
 
 const a = ref<ArticleDetail | undefined>();
 
@@ -43,7 +45,7 @@ function onArchive() {
 <template>
   <header class="category-header">
     <v-btn icon="mdi-arrow-left" @click="onBackClicked" variant="plain"></v-btn>
-    <h1 class="view-title">{{ app.currentCategory?.title ?? 'unknown category' }}</h1>
+    <h1 class="view-title">{{ currentCategory?.title ?? 'unknown category' }}</h1>
     <span class="header-spacer"></span>
   </header>
   <div class="ui-action-container">
@@ -51,8 +53,8 @@ function onArchive() {
       Move
       <v-dialog activator="parent" v-model="showMoveDialog">
         <move-article-dialog
-          :default-category="app.currentCategory!"
-          :selectable-categories="app.categories"
+          :default-category="currentCategory!"
+          :selectable-categories="categories"
           @move="onMove"
           @close="showMoveDialog = false"
           @archive="onArchive"
