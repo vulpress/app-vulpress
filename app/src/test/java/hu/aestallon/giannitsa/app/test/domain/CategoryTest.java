@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @BusinessLogicTest
-class AdminCategoryTest {
+class CategoryTest {
 
   @Autowired
   ContentCategoryService contentCategoryService;
