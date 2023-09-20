@@ -57,4 +57,28 @@ class AppBarServiceTest {
                 .code("articles")
                 .title("Articles"));
   }
+
+  @Test
+  void requestingAppBarModelForAdmin_returnsBuiltInCategories_butNotArchive() {
+    Users.asAdmin();
+
+    AppBarModel model = appBarService.model();
+    assertThat(model)
+        .isNotNull();
+    assertThat(model.getAppName()).isNotNull();
+    assertThat(model.getLoggedIn()).isTrue();
+    assertThat(model.getAvailableCategories())
+        .isNotNull()
+        .hasSize(3)
+        .contains(
+            new UiAction()
+                .code("homilies")
+                .title("Homilies"),
+            new UiAction()
+                .code("articles")
+                .title("Articles"),
+            new UiAction()
+                .code("sys_sandbox")
+                .title("Sandbox"));
+  }
 }

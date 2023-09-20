@@ -25,7 +25,12 @@ public class MainViewService implements ViewService {
   public List<UiAction> actions(String identifier) {
     return (userService.isCurrentUserAdmin())
         ? List.of(
-        new UiAction())
+        new UiAction()
+            .code("create-category")
+            .title("New Category"),
+        new UiAction()
+            .code("archive")
+            .title("Archive"))
         : Collections.emptyList();
   }
 }

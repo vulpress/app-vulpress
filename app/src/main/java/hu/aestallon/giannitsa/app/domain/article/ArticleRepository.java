@@ -46,6 +46,8 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
   @Query("update article a set a.content_category = :to where a.content_category = :from")
   boolean moveAllArticles(@Param("from") Long from, @Param("to") Long to);
 
+  boolean existsByNormalisedTitle(String normalisedTitle);
+
   Optional<Article> findByNormalisedTitle(String normalisedTitle);
 
 }
