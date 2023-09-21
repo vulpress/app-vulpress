@@ -1,13 +1,17 @@
-drop all objects;
+drop
+all objects;
 
 drop table if exists account_user;
 create table if not exists account_user
 (
     id        serial     not null primary key,
     username  text       not null,                 -- username used for authentication
+    mail_addr text       not null default '',      -- email address
     user_pw   text       not null,                 -- encrypted password
     user_role varchar(5) not null default 'PLAIN', -- possible values: PLAIN, ADMIN
-    inactive  boolean    not null default false
+    inactive  boolean    not null default false,
+    reg_token uuid,                                -- token for registration and password recovery
+    token_exp timestamp without time zone          -- expiration timestamp for the token, if any
 );
 
 insert into account_user (username, user_pw, user_role)
@@ -27,18 +31,18 @@ drop index if exists article_title_idx;
 drop table if exists article;
 create table if not exists article
 (
-    id               serial  not null primary key,
-    norm_title       text    not null,
-    title            text    not null            default '',           -- the title of the article
-    author_name      text    not null            default '',           -- the author's name; especially important if the author is not a user
+    id               serial       not null primary key,
+    norm_title       varchar(100) not null,
+    title            text         not null       default '',           -- the title of the article
+    author_name      text         not null       default '',           -- the author's name; especially important if the author is not a user
     author_id        integer,                                          -- if NULL, the author is not an application user
-    description      text    not null            default '',           -- short description usable for previews
+    description      text         not null       default '',           -- short description usable for previews
     created_at       timestamp without time zone default now(),
     issue_date       date                        default current_date, -- if the article is relevant for a specific date (e.g. a Christmas speech) this denotes that date,
     image            uuid,                                             -- the UUID of the cover image
-    content_category integer not null            default 0
+    content_category integer      not null       default 0
 );
-create index if not exists article_title_idx on article (norm_title);
+create unique index if not exists article_title_idx on article (norm_title);
 
 drop table if exists paragaph;
 create table if not exists paragraph
@@ -69,7 +73,7 @@ drop table if exists content_category;
 create table if not exists content_category
 (
     id          serial                      not null primary key,
-    norm_title  text                        not null,
+    norm_title  varchar(100)                not null,
     title       text                        not null default '',
     description text                        not null default '',
     built_in    boolean                     not null default false,
@@ -77,7 +81,7 @@ create table if not exists content_category
     image       uuid,
     created_at  timestamp without time zone not null default now()
 );
-create index if not exists category_title_idx on content_category (norm_title);
+create unique index if not exists category_title_idx on content_category (norm_title);
 
 insert into content_category (norm_title, title, description, built_in, public_vis)
 values ('sys_archive', 'Archive', 'Category for deleted elements', true, false),
