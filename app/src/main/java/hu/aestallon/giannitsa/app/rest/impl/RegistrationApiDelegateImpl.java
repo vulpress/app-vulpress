@@ -1,8 +1,10 @@
 package hu.aestallon.giannitsa.app.rest.impl;
 
+import hu.aestallon.giannitsa.app.registration.RegistrationService;
 import hu.aestallon.giannitsa.app.rest.api.RegistrationApiDelegate;
 import hu.aestallon.giannitsa.app.rest.model.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +14,22 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RegistrationApiDelegateImpl implements RegistrationApiDelegate {
 
+  private final RegistrationService registrationService;
+
   @Override
   public ResponseEntity<Void> registerAccount(AuthenticationRequest authenticationRequest) {
-    return RegistrationApiDelegate.super.registerAccount(authenticationRequest);
+    return switch (registrationService.register(authenticationRequest)) {
+      case ERR_INSUFFICIENT -> ResponseEntity.unprocessableEntity().build();
+      case ERR_USERNAME_TAKEN -> ResponseEntity.status(HttpStatus.CONFLICT).build();
+      case OK -> ResponseEntity.status(HttpStatus.CREATED).build();
+    };
   }
 
   @Override
   public ResponseEntity<Void> verifyAccount(UUID registrationToken) {
-    return RegistrationApiDelegate.super.verifyAccount(registrationToken);
+    return (registrationService.verify(registrationToken))
+        ? ResponseEntity.ok().build()
+        : ResponseEntity.badRequest().build();
   }
 
 }
