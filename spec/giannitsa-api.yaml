@@ -10,6 +10,8 @@ info:
 tags:
   - name: Auth
     description: Authentication related endpoints
+  - name: Registration
+    description: Registration related endpoints
   - name: View
     description: Endpoints for loading view specific information
   - name: Article
@@ -57,8 +59,53 @@ paths:
           description: Ok
         '403':
           description: Unauthorized
-  
-  # View
+
+  # Registration
+  /registration:
+    post:
+      summary: Submits a registration.
+      description: |
+        ...
+      tags:
+        - Registration
+      operationId: registerAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+      responses:
+        '201':
+          description: Registration accepted
+        '409':
+          description: Username taken
+        '422':
+          description: Inappropriate properties
+    get:
+      summary: Activates a registration.
+      description: |
+        ...
+      tags:
+        - Registration
+      operationId: verifyAccount
+      parameters:
+        - in: query
+          name: registrationToken
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: |
+            Idempotent OK.
+            
+            Attempting to verify a valid registration token always returns with this response.
+        '400':
+          description: Unknown registration
+
+        # View
   /view/app:
     get:
       summary: Returns the state of the app bar.
