@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from 'axios';
-import { ArticleApi, AuthApi, Configuration, RegistrationApi, ViewApi } from '@/api/giannitsa';
+import { ArticleApi, AuthApi, Configuration, RegistrationApi, ViewApi } from '@/api/vulpress';
 import AuthService from './auth.service';
 import ViewService from './view.service';
 import ArticleService from './article.service';

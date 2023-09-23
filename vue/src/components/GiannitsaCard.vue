@@ -1,12 +1,12 @@
 <script setup lang="ts">
-interface GiannitsaCardProps {
+interface vulpressCardProps {
   title: string;
   text: string;
   issueDate?: string;
   author?: string;
 }
 
-const props = defineProps<GiannitsaCardProps>();
+const props = defineProps<vulpressCardProps>();
 </script>
 
 <template>

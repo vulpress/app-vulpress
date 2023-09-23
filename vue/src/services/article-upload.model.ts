@@ -1,4 +1,4 @@
-import { Category } from '@/api/giannitsa';
+import { Category } from '@/api/vulpress';
 
 export default interface ArticleUpload {
   category: Category;

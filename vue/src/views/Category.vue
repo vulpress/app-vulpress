@@ -3,7 +3,7 @@ import { useAppStore } from '@/store/app';
 import { ref } from 'vue';
 import { Router, useRouter } from 'vue-router';
 
-import { UiAction } from '@/api/giannitsa';
+import { UiAction } from '@/api/vulpress';
 import ArticleUploadDialog from '@/components/ArticleUploadDialog.vue';
 import GiannitsaCard from '@/components/GiannitsaCard.vue';
 import { viewService } from '@/services';

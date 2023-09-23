@@ -1,4 +1,4 @@
-import { AppBarModel, UiAction, ViewApi } from '@/api/giannitsa';
+import { AppBarModel, UiAction, ViewApi } from '@/api/vulpress';
 
 export default class ViewService {
   constructor(private viewApi: ViewApi) {}

@@ -15,7 +15,7 @@
  */
 
 // Utilities
-import { ApiError, AppBarModel, ArticleDetail, ArticlePreview, Category } from '@/api/giannitsa';
+import { ApiError, AppBarModel, ArticleDetail, ArticlePreview, Category } from '@/api/vulpress';
 import { articleService, viewService } from '@/services';
 import ArticleUpload from '@/services/article-upload.model';
 import { defineStore } from 'pinia';

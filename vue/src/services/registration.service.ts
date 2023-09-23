@@ -1,4 +1,4 @@
-import { AuthenticationRequest, RegistrationApi } from '@/api/giannitsa';
+import { AuthenticationRequest, RegistrationApi } from '@/api/vulpress';
 
 export default class RegistrationService {
   constructor(private registrationApi: RegistrationApi) {}

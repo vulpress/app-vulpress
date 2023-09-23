@@ -4,10 +4,10 @@
   "generator-cli": {
     "version": "6.6.0",
     "generators": {
-      "giannitsa-api": {
+      "vulpress-api": {
         "generatorName": "typescript-axios",
-        "inputSpec": "../spec/giannitsa-api.yaml",
-        "output": "src/api/giannitsa"
+        "inputSpec": "../spec/vulpress-api.yaml",
+        "output": "src/api/vulpress"
       }
     }
   }

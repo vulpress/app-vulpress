@@ -1,4 +1,4 @@
-import { ApiError, ArticleApi, ArticleDetail, ArticlePreview, Category } from '@/api/giannitsa';
+import { ApiError, ArticleApi, ArticleDetail, ArticlePreview, Category } from '@/api/vulpress';
 import ArticleUpload from './article-upload.model';
 
 export default class ArticleService {
