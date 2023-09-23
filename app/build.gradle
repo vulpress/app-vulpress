@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'hu.aestallon.vulpress'
-version = '0.1.0'
+version = '0.1.1'
 
 java {
   sourceCompatibility = '17'
