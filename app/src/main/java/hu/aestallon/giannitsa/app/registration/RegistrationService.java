@@ -10,6 +10,7 @@ import hu.aestallon.giannitsa.app.rest.model.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,12 @@ public class RegistrationService {
   private final PasswordEncoder           passwordEncoder;
 
 
+  @Value("${vulpress.reg.password.length-min:8}")
+  private int      minPasswordLength;
+  @Value("${vulpress.reg.token-validity:PT3H}")
+  private Duration verificationTokenValidity;
+
+
   public RegistrationResult register(AuthenticationRequest authenticationRequest) {
     log.debug("RegistrationService.register invoked for {}", authenticationRequest);
 
@@ -38,7 +45,7 @@ public class RegistrationService {
     final String rawPassword = authenticationRequest.getPassword().trim();
     if (!SIMPLE_MAIL_PTRN.matcher(username).matches()
         || rawPassword.isBlank()
-        || rawPassword.length() < 8) {
+        || rawPassword.length() < minPasswordLength) {
       log.debug("{} does not meet criteria!", authenticationRequest);
       eventPublisher.publishEvent(new RegistrationRejected(
           authenticationRequest,
@@ -55,7 +62,7 @@ public class RegistrationService {
     }
 
     User user = new User(username, passwordEncoder.encode(rawPassword), UserService.PLAIN, true)
-        .token(Duration.ofHours(3));
+        .token(verificationTokenValidity);
     user = userRepository.save(user);
     log.debug("User created: {}", user);
 
@@ -64,16 +71,20 @@ public class RegistrationService {
   }
 
   public boolean verify(UUID registrationToken) {
+    log.debug("Verifying registration: [ {} ]", registrationToken);
     final var userOpt = userRepository.findOptionalByToken(registrationToken);
     if (userOpt.isEmpty()) {
+      log.warn("Unknown registration token [ {} ]", registrationToken);
       return false;
     }
 
     final User user = userOpt.get();
     if (user.inactive()) {
+      log.debug("User has not yet been activated: {} ACTIVATING...", user);
       userRepository.activate(user.id());
       eventPublisher.publishEvent(new AccountActivated(user));
     }
+    log.debug("Registration verified for user: {}", user);
     return true;
   }
 

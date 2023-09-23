@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppBarService implements ViewService {
 
-  @Value("${app.giannitsa.name:app giannitsa}")
+  @Value("${spring.application.name:Vulpress}")
   private String appName;
 
   private final UserService            userService;

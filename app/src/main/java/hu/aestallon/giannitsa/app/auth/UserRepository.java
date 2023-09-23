@@ -36,6 +36,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
   boolean existsByUsername(String username);
 
   @Modifying
-  @Query("update account_user u set u.inactive = true where u.id = :id")
+  @Query("update account_user u set u.inactive = false where u.id = :id")
   boolean activate(Long id);
 }
