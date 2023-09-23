@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Category } from '@/api/giannitsa';
+import { Category } from '@/api/vulpress';
 import { Ref } from 'vue';
 import { ref } from 'vue';
 

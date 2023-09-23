@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Giannitsa Web App BFF API
+ * Vulpress API
  * A simple API to allow server-client communications
  *
  * The version of the OpenAPI document: 1.0.0

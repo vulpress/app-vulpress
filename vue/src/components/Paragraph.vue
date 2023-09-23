@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Paragraph } from '@/api/giannitsa';
+import { Paragraph } from '@/api/vulpress';
 
 const props = defineProps<{ paragraph: Paragraph }>();
 </script>

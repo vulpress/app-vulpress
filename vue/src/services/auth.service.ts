@@ -1,4 +1,4 @@
-import { AuthApi, AuthenticationRequest } from '@/api/giannitsa';
+import { AuthApi, AuthenticationRequest } from '@/api/vulpress';
 
 export default class AuthService {
   constructor(private authApi: AuthApi) {}

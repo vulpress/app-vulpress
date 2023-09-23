@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Category } from '@/api/giannitsa';
+import { Category } from '@/api/vulpress';
 import { Ref, ref, watch } from 'vue';
 
 interface MoveArticleDialogProps {

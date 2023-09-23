@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Category } from '@/api/giannitsa';
+import { Category } from '@/api/vulpress';
 import ArticleUpload from '@/services/article-upload.model';
 import { watch } from 'vue';
 import { Ref, ref } from 'vue';

@@ -1,5 +1,5 @@
 {
-  "name": "vue",
+  "name": "vulpress-vue-client",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "watch": "vite build --watch",
     "lint": "eslint . --fix --ignore-path .gitignore",
-    "generate:giannitsa": "openapi-generator-cli generate --generator-key giannitsa-api"
+    "generate:vulpress": "openapi-generator-cli generate --generator-key vulpress-api"
   },
   "dependencies": {
     "@mdi/font": "7.0.96",

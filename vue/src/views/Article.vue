@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArticleDetail, Category, UiAction } from '@/api/giannitsa';
+import { ArticleDetail, Category, UiAction } from '@/api/vulpress';
 import { useAppStore } from '@/store/app';
 import { Router, useRouter } from 'vue-router';
 

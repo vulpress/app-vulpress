@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AuthenticationRequest } from '@/api/giannitsa';
+import { AuthenticationRequest } from '@/api/vulpress';
 import { registrationService } from '@/services';
 import { Ref, ref } from 'vue';
 
