@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 
 @Configuration
-public class GiannitsaAppConfig {
+public class VulpressAppConfig {
 
 
   @Bean

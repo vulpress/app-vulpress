@@ -72,7 +72,7 @@ import java.io.IOException;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class GiannitsaWebSecurityConfig {
+public class VulpressWebSecurityConfig {
 
   private final UserService userService;
   private final JwtRequestFilter jwtRequestFilter;
