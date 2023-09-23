@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
-  
+
   private static final Logger log = LoggerFactory.getLogger(EmailServiceImpl.class);
 
   private final JavaMailSender javaMailSender;
