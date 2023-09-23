@@ -20,11 +20,15 @@ watch(selectedCategory, (a, b) => {
   console.log('from', b);
   console.log('to', a);
 });
+
+function onSubmit() {
+  emit('move', selectedCategory.value);
+}
 </script>
 
 <template>
   <v-card class="dialog-card">
-    <v-form class="dialog-form">
+    <v-form class="dialog-form" @submit.prevent="onSubmit">
       <div class="ui-action-container" v-if="props.defaultCategory.code !== 'sys_archive'">
         <span class="ui-action v-btn--size-default"></span>
         <v-btn color="secondary" class="ui-action" @click="$emit('archive')">Archive</v-btn>
@@ -40,13 +44,7 @@ watch(selectedCategory, (a, b) => {
       ></v-select>
       <div class="ui-action-container">
         <v-btn class="ui-action ui-action-disabled" @click="$emit('close')">Cancel</v-btn>
-        <v-btn
-          class="ui-action"
-          color="primary"
-          type="submit"
-          @click="$emit('move', selectedCategory)"
-          >Move</v-btn
-        >
+        <v-btn class="ui-action" color="primary" type="submit">Move</v-btn>
       </div>
     </v-form>
   </v-card>
