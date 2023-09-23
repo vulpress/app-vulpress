@@ -4,10 +4,12 @@ local.settings.gradle
 
 # Ignore Gradle build output directory
 build
+bin
 
 ### Frontend related stuff
 node_modules
 dist
+app/src/main/resources/static/**
 
 ### Editor related stuff
 .idea

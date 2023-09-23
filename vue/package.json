@@ -1,15 +1,19 @@
 {
-  "name": "vue",
-  "version": "0.0.0",
+  "name": "vulpress-vue-client",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --fix --ignore-path .gitignore"
+    "watch": "vite build --watch",
+    "lint": "eslint . --fix --ignore-path .gitignore",
+    "generate:vulpress": "openapi-generator-cli generate --generator-key vulpress-api"
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "@openapitools/openapi-generator-cli": "^2.7.0",
+    "axios": "^1.4.0",
     "core-js": "^3.29.0",
     "pinia": "^2.0.0",
     "roboto-fontface": "*",

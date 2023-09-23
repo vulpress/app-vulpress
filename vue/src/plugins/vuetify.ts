@@ -21,22 +21,31 @@
  */
 
 // Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles';
 
 // Composables
-import { createVuetify } from 'vuetify'
+import { createVuetify, ThemeDefinition } from 'vuetify';
 
+const figmaTheme: ThemeDefinition = {
+  dark: false,
+  colors: {
+    background: '#F5F5F5',
+    surface: '#FFF29C',
+    primary: '#492B7C',
+    secondary: '#F6D912',
+    error: '#E90707',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#ED8A0A',
+  },
+};
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
+    defaultTheme: 'figmaTheme',
     themes: {
-      light: {
-        colors: {
-          primary: '#1867C0',
-          secondary: '#5CBBF6',
-        },
-      },
+      figmaTheme,
     },
   },
-})
+});
