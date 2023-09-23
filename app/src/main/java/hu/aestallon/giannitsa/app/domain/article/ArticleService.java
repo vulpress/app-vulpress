@@ -28,7 +28,7 @@ public class ArticleService {
         (articleDetail.getAuthor() == null)
             ? AggregateReference.to(userService.currentUser().id())
             : null,
-        (articleDetail.getAuthor() == null)
+        (articleDetail.getAuthor() == null || articleDetail.getAuthor().isBlank())
             ? userService.currentUser().username()
             : articleDetail.getAuthor(),
         AggregateReference.to(category),
