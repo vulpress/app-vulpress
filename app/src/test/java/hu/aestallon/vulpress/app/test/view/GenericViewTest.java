@@ -1,7 +1,7 @@
-package hu.aestallon.giannitsa.app.test.view;
+package hu.aestallon.vulpress.app.test.view;
 
-import hu.aestallon.giannitsa.app.config.BusinessLogicTest;
-import hu.aestallon.giannitsa.app.view.distributor.ViewServiceDistributor;
+import hu.aestallon.vulpress.app.config.BusinessLogicTest;
+import hu.aestallon.vulpress.app.view.distributor.ViewServiceDistributor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

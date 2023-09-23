@@ -1,11 +1,11 @@
-package hu.aestallon.giannitsa.app.test.view;
+package hu.aestallon.vulpress.app.test.view;
 
-import hu.aestallon.giannitsa.app.config.BusinessLogicTest;
-import hu.aestallon.giannitsa.app.domain.category.ContentCategoryService;
-import hu.aestallon.giannitsa.app.rest.model.UiAction;
-import hu.aestallon.giannitsa.app.test.util.Users;
-import hu.aestallon.giannitsa.app.view.ViewNames;
-import hu.aestallon.giannitsa.app.view.distributor.ViewServiceDistributor;
+import hu.aestallon.vulpress.app.config.BusinessLogicTest;
+import hu.aestallon.vulpress.app.domain.category.ContentCategoryService;
+import hu.aestallon.vulpress.app.rest.model.UiAction;
+import hu.aestallon.vulpress.app.test.util.Users;
+import hu.aestallon.vulpress.app.view.ViewNames;
+import hu.aestallon.vulpress.app.view.distributor.ViewServiceDistributor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

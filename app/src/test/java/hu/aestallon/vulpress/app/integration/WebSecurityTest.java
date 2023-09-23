@@ -56,7 +56,7 @@ class WebSecurityTest {
   RestTemplate restTemplate;
   @LocalServerPort
   private int    serverPort;
-  @Value("${openapi.vulpressWebAppBFF.base-path:/}")
+  @Value("${openapi.vulpress.base-path:/}")
   private String basePath;
 
   private String jwtToken;
