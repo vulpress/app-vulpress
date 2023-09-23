@@ -32,11 +32,6 @@ const titleRules = [
 const docu = ref();
 const fileRules = [(v: any) => (!!v && !!v.length) || 'Uploading a file is mandatory!'];
 
-watch(docu, (a, b) => {
-  console.log('a', a);
-  console.log('b', b);
-});
-
 const valid: Ref<boolean | null> = ref<boolean | null>(null);
 
 function onSubmitClicked() {

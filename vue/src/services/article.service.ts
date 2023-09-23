@@ -61,8 +61,6 @@ export default class ArticleService {
   }
 
   async moveArticle(article: string, targetCategory: string): Promise<boolean> {
-    console.log('article to move: ', article);
-    console.log('to: ', targetCategory);
     return await this.articleApi
       .moveArticle({
         article,

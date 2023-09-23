@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { AuthenticationRequest } from '@/api/giannitsa';
 import { registrationService } from '@/services';
-import { Ref } from 'vue';
-import { ref } from 'vue';
-import { load } from 'webfontloader';
+import { Ref, ref } from 'vue';
 
 const emit = defineEmits<{
   (event: 'close'): void;
@@ -27,7 +25,7 @@ async function onSubmit() {
   if (ok) {
     emit('close');
   } else {
-    console.log('registration error!');
+    // TODO: Show registration error!
   }
 }
 </script>

@@ -43,7 +43,6 @@ const showNewCategoryDialog: Ref<boolean> = ref<boolean>(false);
 async function onNewCategoryCreated(category: Category) {
   showNewCategoryDialog.value = false;
   let res = await articleService.createCategory(category);
-  console.log('Create category result: ', res);
   app.appBarModelChanged();
 }
 </script>

@@ -16,11 +16,6 @@ const emit = defineEmits<{
 
 const selectedCategory: Ref<Category> = ref<Category>(props.defaultCategory);
 
-watch(selectedCategory, (a, b) => {
-  console.log('from', b);
-  console.log('to', a);
-});
-
 function onSubmit() {
   emit('move', selectedCategory.value);
 }

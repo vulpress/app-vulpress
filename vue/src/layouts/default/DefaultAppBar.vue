@@ -68,7 +68,6 @@ function onProfileActionClicked(code: string) {
 }
 
 function onLoginClosed() {
-  console.log('invoked onLoginClosed');
   showLoginDialog.value = false;
   app.appBarModelChanged();
 }

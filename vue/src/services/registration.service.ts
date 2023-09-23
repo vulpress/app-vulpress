@@ -9,7 +9,6 @@ export default class RegistrationService {
         return true;
       },
       (err) => {
-        console.log('Registration error: ', err);
         return false;
       }
     );
@@ -24,7 +23,6 @@ export default class RegistrationService {
             return true;
           },
           (err) => {
-            console.log('Registration error: ', err);
             return false;
           }
         )
