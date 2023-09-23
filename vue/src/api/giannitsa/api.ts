@@ -160,6 +160,18 @@ export interface ArticlePreview {
      */
     'description': string;
     /**
+     * 
+     * @type {string}
+     * @memberof ArticlePreview
+     */
+    'issueDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ArticlePreview
+     */
+    'author'?: string;
+    /**
      * The unique identifier of the image to be as thumbnail for the article. 
      * @type {string}
      * @memberof ArticlePreview

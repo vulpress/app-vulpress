@@ -107,6 +107,8 @@ const showDeleteDialog = ref<boolean>(false);
       v-for="(a, i) in articles"
       :title="a.title!"
       :text="a.description ?? ''"
+      :issue-date="a.issueDate"
+      :author="a.author ?? 'System Administrator'"
       @click="onArticleClicked(a.code!)"
     ></giannitsa-card>
   </div>

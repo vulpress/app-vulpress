@@ -23,6 +23,7 @@ function onSubmit() {
 
 <template>
   <v-card class="dialog-card">
+    <v-card-title class="dialog-title">Move Article</v-card-title>
     <v-form class="dialog-form" @submit.prevent="onSubmit">
       <div class="ui-action-container" v-if="props.defaultCategory.code !== 'sys_archive'">
         <span class="ui-action v-btn--size-default"></span>
