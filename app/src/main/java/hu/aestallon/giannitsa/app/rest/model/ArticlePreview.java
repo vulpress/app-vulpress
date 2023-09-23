@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
 import javax.validation.Valid;
@@ -29,6 +31,13 @@ public class ArticlePreview {
 
   @JsonProperty("description")
   private String description;
+
+  @JsonProperty("issueDate")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate issueDate;
+
+  @JsonProperty("author")
+  private String author;
 
   @JsonProperty("thumbnail")
   private java.util.UUID thumbnail;
@@ -90,6 +99,44 @@ public class ArticlePreview {
     this.description = description;
   }
 
+  public ArticlePreview issueDate(LocalDate issueDate) {
+    this.issueDate = issueDate;
+    return this;
+  }
+
+  /**
+   * Get issueDate
+   * @return issueDate
+  */
+  @Valid 
+  @Schema(name = "issueDate", required = false)
+  public LocalDate getIssueDate() {
+    return issueDate;
+  }
+
+  public void setIssueDate(LocalDate issueDate) {
+    this.issueDate = issueDate;
+  }
+
+  public ArticlePreview author(String author) {
+    this.author = author;
+    return this;
+  }
+
+  /**
+   * Get author
+   * @return author
+  */
+  
+  @Schema(name = "author", required = false)
+  public String getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(String author) {
+    this.author = author;
+  }
+
   public ArticlePreview thumbnail(java.util.UUID thumbnail) {
     this.thumbnail = thumbnail;
     return this;
@@ -121,12 +168,14 @@ public class ArticlePreview {
     return Objects.equals(this.code, articlePreview.code) &&
         Objects.equals(this.title, articlePreview.title) &&
         Objects.equals(this.description, articlePreview.description) &&
+        Objects.equals(this.issueDate, articlePreview.issueDate) &&
+        Objects.equals(this.author, articlePreview.author) &&
         Objects.equals(this.thumbnail, articlePreview.thumbnail);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, title, description, thumbnail);
+    return Objects.hash(code, title, description, issueDate, author, thumbnail);
   }
 
   @Override
@@ -136,6 +185,8 @@ public class ArticlePreview {
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    issueDate: ").append(toIndentedString(issueDate)).append("\n");
+    sb.append("    author: ").append(toIndentedString(author)).append("\n");
     sb.append("    thumbnail: ").append(toIndentedString(thumbnail)).append("\n");
     sb.append("}");
     return sb.toString();

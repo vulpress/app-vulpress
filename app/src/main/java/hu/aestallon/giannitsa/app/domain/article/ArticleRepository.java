@@ -31,7 +31,7 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
   @Query("select distinct at.tag_ from article_tag at")
   Set<String> findAllTags();
 
-  @Query( // TODO: Only select norm_title, title, description and imageUuid
+  @Query( // TODO: Do not select paragraphs!
       """
           select a.* from article a 
           join content_category c on c.id = a.content_category 

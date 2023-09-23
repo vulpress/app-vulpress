@@ -19,6 +19,7 @@ package hu.aestallon.giannitsa.app.domain.article;
 import hu.aestallon.giannitsa.app.auth.User;
 import hu.aestallon.giannitsa.app.domain.category.ContentCategory;
 import hu.aestallon.giannitsa.app.rest.model.ArticleDetail;
+import hu.aestallon.giannitsa.app.rest.model.ArticlePreview;
 import hu.aestallon.giannitsa.app.rest.model.Paragraph;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
@@ -76,6 +77,15 @@ public record Article(
             .filter(p -> Article.ParagraphType.TEXT == p.type())
             .map(p -> new hu.aestallon.giannitsa.app.rest.model.Paragraph().text(p.content()))
             .toList());
+  }
+
+  public ArticlePreview toPreview() {
+    return new ArticlePreview()
+        .code(normalisedTitle)
+        .title(title)
+        .author(authorName)
+        .issueDate(issueDate)
+        .description(description);
   }
 
 }

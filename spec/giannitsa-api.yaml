@@ -476,6 +476,11 @@ components:
           type: string
         description:
           type: string
+        issueDate:
+          type: string
+          format: date
+        author:
+          type: string
         thumbnail:
           type: string
           format: uuid

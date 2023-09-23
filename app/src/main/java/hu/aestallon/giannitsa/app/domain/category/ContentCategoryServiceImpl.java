@@ -114,13 +114,13 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 
   @Override
   public List<ArticlePreview> articlesOf(String categoryCode) {
-    // TODO: Check visibility! Check existence!
+    if (!isCategoryPermitted(categoryCode)) {
+      throw new ForbiddenOperationException("Cannot show contents of category: " + categoryCode);
+    }
+
     return Streamable
         .of(articleRepository.findArticlesOfCategory(categoryCode)).stream()
-        .map(a -> new ArticlePreview()
-            .code(a.normalisedTitle())
-            .title(a.title())
-            .description(a.description()))
+        .map(Article::toPreview)
         .toList();
   }
 
@@ -174,6 +174,12 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
     }
 
     return article.toDetail();
+  }
+
+  private boolean isCategoryPermitted(String category) {
+    return isCategoryPermitted(contentCategoryRepository
+        .findByNormalisedTitle(category)
+        .orElse(null));
   }
 
   private boolean isCategoryPermitted(ContentCategory category) {
