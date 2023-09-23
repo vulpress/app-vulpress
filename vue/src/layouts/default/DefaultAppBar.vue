@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import LoginDialog from '@/components/LoginDialog.vue';
+import RegistrationDialog from '@/components/RegistrationDialog.vue';
 import { authService } from '@/services';
 import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
@@ -60,6 +61,9 @@ function onProfileActionClicked(code: string) {
       authService.logout();
       app.appBarModelChanged();
       break;
+    case 'register':
+      showRegisterDialog.value = true;
+      break;
   }
 }
 
@@ -68,6 +72,8 @@ function onLoginClosed() {
   showLoginDialog.value = false;
   app.appBarModelChanged();
 }
+
+const showRegisterDialog = ref<boolean>(false);
 </script>
 
 <template>
@@ -114,6 +120,9 @@ function onLoginClosed() {
 
   <v-dialog v-model="showLoginDialog">
     <login-dialog @ready-to-close="onLoginClosed"></login-dialog>
+  </v-dialog>
+  <v-dialog v-model="showRegisterDialog">
+    <registration-dialog @close="showRegisterDialog = false"></registration-dialog>
   </v-dialog>
 </template>
 

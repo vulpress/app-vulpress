@@ -1149,6 +1149,183 @@ export class AuthApi extends BaseAPI {
 
 
 /**
+ * RegistrationApi - axios parameter creator
+ * @export
+ */
+export const RegistrationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * ... 
+         * @summary Submits a registration.
+         * @param {AuthenticationRequest} authenticationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerAccount: async (authenticationRequest: AuthenticationRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'authenticationRequest' is not null or undefined
+            assertParamExists('registerAccount', 'authenticationRequest', authenticationRequest)
+            const localVarPath = `/registration`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(authenticationRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * ... 
+         * @summary Activates a registration.
+         * @param {string} registrationToken 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        verifyAccount: async (registrationToken: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registrationToken' is not null or undefined
+            assertParamExists('verifyAccount', 'registrationToken', registrationToken)
+            const localVarPath = `/registration`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (registrationToken !== undefined) {
+                localVarQueryParameter['registrationToken'] = registrationToken;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RegistrationApi - functional programming interface
+ * @export
+ */
+export const RegistrationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RegistrationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * ... 
+         * @summary Submits a registration.
+         * @param {AuthenticationRequest} authenticationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registerAccount(authenticationRequest: AuthenticationRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registerAccount(authenticationRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * ... 
+         * @summary Activates a registration.
+         * @param {string} registrationToken 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async verifyAccount(registrationToken: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.verifyAccount(registrationToken, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * RegistrationApi - factory interface
+ * @export
+ */
+export const RegistrationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RegistrationApiFp(configuration)
+    return {
+        /**
+         * ... 
+         * @summary Submits a registration.
+         * @param {AuthenticationRequest} authenticationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerAccount(authenticationRequest: AuthenticationRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.registerAccount(authenticationRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * ... 
+         * @summary Activates a registration.
+         * @param {string} registrationToken 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        verifyAccount(registrationToken: string, options?: any): AxiosPromise<void> {
+            return localVarFp.verifyAccount(registrationToken, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RegistrationApi - object-oriented interface
+ * @export
+ * @class RegistrationApi
+ * @extends {BaseAPI}
+ */
+export class RegistrationApi extends BaseAPI {
+    /**
+     * ... 
+     * @summary Submits a registration.
+     * @param {AuthenticationRequest} authenticationRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public registerAccount(authenticationRequest: AuthenticationRequest, options?: AxiosRequestConfig) {
+        return RegistrationApiFp(this.configuration).registerAccount(authenticationRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * ... 
+     * @summary Activates a registration.
+     * @param {string} registrationToken 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public verifyAccount(registrationToken: string, options?: AxiosRequestConfig) {
+        return RegistrationApiFp(this.configuration).verifyAccount(registrationToken, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * ViewApi - axios parameter creator
  * @export
  */
