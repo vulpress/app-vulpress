@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-group = 'hu.aestallon.giannitsa.docu'
+group = 'hu.aestallon.vulpress'
 version = 'unspecified'
 
 repositories {

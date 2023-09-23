@@ -6,7 +6,7 @@ plugins {
   id "org.openapi.generator" version "6.2.1"
 }
 
-group = 'hu.aestallon.giannitsa'
+group = 'hu.aestallon.vulpress'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -39,7 +39,7 @@ dependencies {
   implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
   implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
 
-  implementation project(':giannitsa-mod-document')
+  implementation project(':vulpress-mod-document')
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
   compileOnly 'org.projectlombok:lombok'
@@ -65,12 +65,12 @@ tasks.named("jar") {
 def processFrontendResourcesTask = 'processFrontendResources'
 
 tasks.register(processFrontendResourcesTask, Copy) {
-  def frontendBuildDir = file("${project(':giannitsa-ui-vue').buildDir}/../dist")
+  def frontendBuildDir = file("${project(':vulpress-ui-vue').buildDir}/../dist")
   def appResourcesDir = file("${project.buildDir}/resources/main/static")
 
   group 'frontend'
   description 'process frontend resources'
-  dependsOn project(':giannitsa-ui-vue').tasks.named('assembleFrontend')
+  dependsOn project(':vulpress-ui-vue').tasks.named('assembleFrontend')
 
   println "copying frontend resources from [ $frontendBuildDir ] to [ $appResourcesDir ]"
 
@@ -84,10 +84,10 @@ tasks.named('processResources') {
 
 openApiGenerate {
   generatorName = "spring"
-  inputSpec = "$rootDir/spec/giannitsa-api.yaml".toString()
+  inputSpec = "$rootDir/spec/vulpress-api.yaml".toString()
   outputDir = "$rootDir/app".toString()
-  apiPackage = "hu.aestallon.giannitsa.app.rest.api"
-  modelPackage = "hu.aestallon.giannitsa.app.rest.model"
+  apiPackage = "hu.aestallon.vulpress.app.rest.api"
+  modelPackage = "hu.aestallon.vulpress.app.rest.model"
   configOptions = [
       dateLibrary            : "java8-localdatetime",
       delegatePattern        : "true",

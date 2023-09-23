@@ -1,13 +1,13 @@
-rootProject.name = 'app-giannitsa'
+rootProject.name = 'app-vulpress'
 
-include 'giannitsa-app-server'
-project (':giannitsa-app-server').projectDir = file('app')
+include 'vulpress-app-server'
+project (':vulpress-app-server').projectDir = file('app')
 
-include 'giannitsa-ui-vue'
-project(':giannitsa-ui-vue').projectDir = file('vue')
+include 'vulpress-ui-vue'
+project(':vulpress-ui-vue').projectDir = file('vue')
 
-include 'giannitsa-mod-document'
-project(':giannitsa-mod-document').projectDir = file('docu')
+include 'vulpress-mod-document'
+project(':vulpress-mod-document').projectDir = file('docu')
 
 def localSettings = file('local.settings.gradle')
 if (localSettings.exists()) {
