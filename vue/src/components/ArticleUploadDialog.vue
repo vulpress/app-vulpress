@@ -46,6 +46,7 @@ function onSubmitClicked() {
 
 <template>
   <v-card class="dialog-card" rounded variant="elevated">
+    <v-card-title class="dialog-title">Upload New Article</v-card-title>
     <v-form class="dialog-form" fast-fail v-model="valid" @submit.prevent="onSubmitClicked">
       <v-select
         variant="outlined"

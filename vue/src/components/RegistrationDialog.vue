@@ -32,6 +32,7 @@ async function onSubmit() {
 
 <template>
   <v-card class="dialog-card">
+    <v-card-title class="dialog-title">Register</v-card-title>
     <v-form class="dialog-form" @submit.prevent="onSubmit">
       <v-text-field
         type="text"

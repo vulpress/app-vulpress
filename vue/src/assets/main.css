@@ -83,3 +83,13 @@ body {
   flex-direction: column;
   gap: 1.25rem;
 }
+
+.dialog-title {
+  font-size: 1.5rem !important;
+  color: var(--gr-text) !important;
+  font-weight: 400 !important;
+  text-align: center !important;
+  line-height: normal !important;
+  margin-bottom: 1.25rem;
+  padding: unset !important;
+}

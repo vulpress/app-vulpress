@@ -32,6 +32,7 @@ async function onLoginClicked(event: any) {
 
 <template>
   <v-card class="dialog-card" rounded variant="elevated">
+    <v-card-title class="dialog-title">Log in</v-card-title>
     <v-form class="dialog-form" fast-fail v-model="valid" @submit.prevent="onLoginClicked">
       <v-text-field
         type="text"

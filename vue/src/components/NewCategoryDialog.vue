@@ -27,6 +27,7 @@ function onSubmission(event: any) {
 
 <template>
   <v-card variant="outlined" class="dialog-card">
+    <v-card-title class="dialog-title">New Category</v-card-title>
     <v-form fast-fail v-model="valid" @submit.prevent="onSubmission" class="dialog-form">
       <v-text-field
         type="text"
