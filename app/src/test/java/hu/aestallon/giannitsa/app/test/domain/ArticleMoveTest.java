@@ -73,8 +73,11 @@ class ArticleMoveTest {
     assertThat(contentCategoryRepository.existsByNormalisedTitle(categoryCode))
         .isFalse();
     // all its contents are moved to the archive:
-    assertThat(contentCategoryService.articlesOf(categoryCode)).isEmpty();
     assertThat(contentCategoryService.articlesOf(ContentCategoryService.ARCHIVE)).hasSize(2);
+    // attempting to query the deleted category yields an exception:
+    assertThrows(
+        ForbiddenOperationException.class,
+        () -> contentCategoryService.articlesOf(categoryCode));
   }
 
   @Test
