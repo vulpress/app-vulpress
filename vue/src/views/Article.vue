@@ -35,7 +35,6 @@ watch(appBarModel, async (to, fro) => {
 onMounted(async () => {
   a.value = (await app.getArticle(props.category, props.article))!;
   refreshActions();
-  console.log('article', a.value);
 });
 
 async function refreshActions() {
@@ -51,12 +50,10 @@ function onBackClicked() {
 const showMoveDialog = ref<boolean>(false);
 
 function onMove(category: Category) {
-  console.log('moving [article] to [category]: ', props.article, category);
   app.moveArticle(props.article, category.code);
 }
 
 function onArchive() {
-  console.log('deleting [article]: ', props.article);
   app.deleteArticle(props.article);
 }
 </script>

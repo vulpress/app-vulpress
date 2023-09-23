@@ -8,8 +8,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public final class Users {
 
-  public static final User ADMIN_USER = new User(1L, "admin-user", "pw", UserService.ADMIN, false);
-  public static final User PLAIN_USER = new User(2L, "plain-user", "pw", UserService.PLAIN, false);
+  public static final User ADMIN_USER = new User(1L, "admin-user", "admin@address", "pw",
+      UserService.ADMIN, false, null, null);
+  public static final User PLAIN_USER = new User(2L, "plain-user", "plain@domain", "pw",
+      UserService.PLAIN,
+      false, null, null);
 
   public static void asAdmin() {
     asUser(ADMIN_USER);

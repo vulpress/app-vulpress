@@ -31,18 +31,24 @@ const routes = [
     redirect: redirectFromRoot,
     children: [
       {
-        path: 'main',
+        path: '/reg/:token',
+        name: 'verify',
+        component: () => import('@/views/Verification.vue'),
+        props: true,
+      },
+      {
+        path: '/main',
         name: 'main',
         component: () => import('@/views/Main.vue'),
       },
       {
-        path: ':category',
+        path: '/:category',
         name: 'category',
         component: () => import('@/views/Category.vue'),
         props: true,
       },
       {
-        path: ':category/:article',
+        path: '/:category/:article',
         name: 'article',
         component: () => import('@/views/Article.vue'),
         props: true,

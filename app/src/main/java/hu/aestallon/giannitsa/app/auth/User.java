@@ -24,20 +24,26 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
-@Table("user_account")
+@Table("account_user")
 public record User(
     @Id Long id,
     @Column("username") String username,
+    @Column("mail_addr") String email,
     @Column("user_pw") String password,
     @Column("user_role") String role,
-    @Column("inactive") boolean inactive
+    @Column("inactive") boolean inactive,
+    @Column("reg_token") UUID registrationToken,
+    @Column("token_exp") LocalDateTime tokenExpiresAt
 ) implements UserDetails {
 
   public User(String username, String password, String role, boolean inactive) {
-    this(null, username, password, role, inactive);
+    this(null, username, username, password, role, inactive, null, null);
   }
 
   @Override
@@ -73,6 +79,11 @@ public record User(
   @Override
   public boolean isEnabled() {
     return !inactive;
+  }
+
+  public User token(TemporalAmount validFor) {
+    return new User(id, username, email, password, role, inactive, UUID.randomUUID(),
+        LocalDateTime.now().plus(validFor));
   }
 
 }

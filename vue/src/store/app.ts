@@ -32,13 +32,11 @@ export const useAppStore = defineStore('app', () => {
 
   async function appBarModelChanged(reroute?: boolean) {
     appBarModel.value = await viewService.appBarModel();
-    console.log('Refreshed app-bar-model', appBarModel.value);
     categoriesChanged(reroute);
   }
 
   async function categoriesChanged(reroute?: boolean) {
     categories.value = await articleService.categories();
-    console.log('Refreshed categories', categories.value);
 
     if (!categories.value.some((c) => c.code === currentCategory.value?.code)) {
       if (reroute) {
@@ -68,17 +66,15 @@ export const useAppStore = defineStore('app', () => {
       };
     } else {
       currentCategory.value = categories.value.find((c) => c.code === category);
-      console.log('found category in load article', currentCategory.value);
     }
 
     if (!currentCategory.value) {
-      console.log('reverting to main');
       toMain();
     }
 
     let result: ArticlePreview[] | ApiError = await articleService.articles(category);
     if (isError(result)) {
-      console.log(result);
+      // TODO: Handle error!
       return;
     }
 
@@ -104,11 +100,9 @@ export const useAppStore = defineStore('app', () => {
   async function getArticle(category: string, article: string): Promise<ArticleDetail | undefined> {
     const res = await articleService.loadArticle(category, article);
     if (isError(res)) {
-      console.log('Article load result: ', res);
       toMain();
       return undefined;
     }
-    console.log('Article load result: ', res);
     return res;
   }
 
@@ -118,7 +112,7 @@ export const useAppStore = defineStore('app', () => {
       if (currentCategory.value) {
         router.push({ name: 'category', params: { category: currentCategory.value.code } });
       } else {
-        console.log('ERROR');
+        // TODO: Handle Error!
       }
     }
   }
@@ -130,7 +124,7 @@ export const useAppStore = defineStore('app', () => {
         // loadArticles(currentCategory.value?.code);
         router.push({ name: 'category', params: { category: currentCategory.value.code } });
       } else {
-        console.log('ERROR');
+        // TODO: Handle Error!
       }
     }
   }

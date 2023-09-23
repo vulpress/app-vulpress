@@ -16,11 +16,13 @@
 
 package hu.aestallon.giannitsa.app.auth;
 
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
@@ -28,4 +30,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
   @Query("select * from account_user where username = :username")
   Optional<User> findOptionalByUsername(String username);
 
+  @Query("select * from account_user where reg_token = :registrationToken")
+  Optional<User> findOptionalByToken(UUID registrationToken);
+
+  boolean existsByUsername(String username);
+
+  @Modifying
+  @Query("update account_user u set u.inactive = false where u.id = :id")
+  boolean activate(Long id);
 }
