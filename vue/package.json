@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "watch": "vite build --watch",
+    "watch": "vite build --watch --outDir=../app/src/main/resources/static --emptyOutDir",
     "lint": "eslint . --fix --ignore-path .gitignore",
     "generate:vulpress": "openapi-generator-cli generate --generator-key vulpress-api"
   },
