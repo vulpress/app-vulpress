@@ -3,7 +3,6 @@ package hu.aestallon.vulpress.app.test.domain;
 import hu.aestallon.vulpress.app.config.BusinessLogicTest;
 import hu.aestallon.vulpress.app.domain.ConstraintViolationException;
 import hu.aestallon.vulpress.app.domain.ForbiddenOperationException;
-import hu.aestallon.vulpress.app.domain.article.Article;
 import hu.aestallon.vulpress.app.domain.article.ArticleService;
 import hu.aestallon.vulpress.app.domain.category.ContentCategory;
 import hu.aestallon.vulpress.app.domain.category.ContentCategoryRepository;

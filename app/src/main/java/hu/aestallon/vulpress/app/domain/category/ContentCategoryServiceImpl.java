@@ -27,14 +27,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
-
 @Service
 @RequiredArgsConstructor
 public class ContentCategoryServiceImpl implements ContentCategoryService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ContentCategoryServiceImpl.class);
+  private static final Logger log = LoggerFactory.getLogger(ContentCategoryServiceImpl.class);
 
   private final UserService               userService;
   private final ArticleService            articleService;
