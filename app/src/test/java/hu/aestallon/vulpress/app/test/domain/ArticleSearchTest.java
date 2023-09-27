@@ -24,23 +24,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 @BusinessLogicTest
 class ArticleSearchTest {
 
-  private static final ArticleDetail PUBLISHED_1 = new ArticleDetail()
+  private static final LocalDate YESTERDAY = LocalDate.now().minusDays(1L);
+  private static final LocalDate TOMORROW  = LocalDate.now().plusDays(1L);
+
+  private static final ArticleDetail PUBLISHED_1  = new ArticleDetail()
       .title("First Title")
-      .issueDate(Dates.YESTERDAY)
+      .issueDate(YESTERDAY)
       .author("me")
       .paragraphs(Stream.of("a", "b", "c", "d", "e", "f")
           .map(s -> new Paragraph().text(s))
           .toList());
-  private static final ArticleDetail PUBLISHED_2 = new ArticleDetail()
+  private static final ArticleDetail PUBLISHED_2  = new ArticleDetail()
       .title("Second Title")
-      .issueDate(Dates.YESTERDAY)
+      .issueDate(YESTERDAY)
       .author("me")
       .paragraphs(Stream.of("evx", "fvx", "gvx", "hvx", "ivx", "gvx")
           .map(s -> new Paragraph().text(s))
           .toList());
   private static final ArticleDetail TO_PUBLISH_1 = new ArticleDetail()
       .title("Third Title")
-      .issueDate(Dates.TOMORROW)
+      .issueDate(TOMORROW)
       .author("me")
       .paragraphs(Stream.of("a", "qq", "ww")
           .map(s -> new Paragraph().text(s))
@@ -52,22 +55,16 @@ class ArticleSearchTest {
       TO_PUBLISH_1);
 
   @Autowired
-  ArticleService articleService;
+  ArticleService            articleService;
   @Autowired
   ContentCategoryRepository contentCategoryRepository;
   @Autowired
-  Clock clock;
+  Clock                     clock;
 
   @BeforeEach
   void beforeEach() {
     final long publicCategoryId = contentCategoryRepository.common().id();
     TEST_ARTICLES.forEach(a -> articleService.save(a, publicCategoryId, "description"));
-  }
-
-  @DirtyTest
-  void clockTest() {
-    assertThat(clock.instant()).isEqualTo(Dates.TEST_INST);
-    assertThat(LocalDate.now(clock)).isEqualTo(Dates.TODAY);
   }
 
   @DirtyTest
@@ -77,9 +74,9 @@ class ArticleSearchTest {
     List<ArticlePreview> articles = articleService.find("title");
     assertThat(articles).hasSize(3);
     // they are ordered from most recent (even in the future) to oldest:
-    assertThat(articles.get(0).getIssueDate()).isEqualTo(Dates.TOMORROW);
-    assertThat(articles.get(1).getIssueDate()).isEqualTo(Dates.YESTERDAY);
-    assertThat(articles.get(2).getIssueDate()).isEqualTo(Dates.YESTERDAY);
+    assertThat(articles.get(0).getIssueDate()).isEqualTo(TOMORROW);
+    assertThat(articles.get(1).getIssueDate()).isEqualTo(YESTERDAY);
+    assertThat(articles.get(2).getIssueDate()).isEqualTo(YESTERDAY);
   }
 
   @DirtyTest
@@ -88,7 +85,7 @@ class ArticleSearchTest {
 
     List<ArticlePreview> articles = articleService.find("third");
     assertThat(articles).hasSize(1);
-    assertThat(articles.get(0).getIssueDate()).isEqualTo(Dates.TOMORROW);
+    assertThat(articles.get(0).getIssueDate()).isEqualTo(TOMORROW);
   }
 
   @DirtyTest
@@ -104,8 +101,8 @@ class ArticleSearchTest {
     List<ArticlePreview> articles = articleService.find("a");
     assertThat(articles).hasSize(2);
     // they are ordered from most recent (even in the future) to oldest:
-    assertThat(articles.get(0).getIssueDate()).isEqualTo(Dates.TOMORROW);
-    assertThat(articles.get(1).getIssueDate()).isEqualTo(Dates.YESTERDAY);
+    assertThat(articles.get(0).getIssueDate()).isEqualTo(TOMORROW);
+    assertThat(articles.get(1).getIssueDate()).isEqualTo(YESTERDAY);
   }
 
   @DirtyTest
@@ -115,8 +112,8 @@ class ArticleSearchTest {
     List<ArticlePreview> articles = articleService.find("title");
     assertThat(articles).hasSize(2);
     // they are ordered from most recent (even in the future) to oldest:
-    assertThat(articles.get(0).getIssueDate()).isEqualTo(Dates.YESTERDAY);
-    assertThat(articles.get(1).getIssueDate()).isEqualTo(Dates.YESTERDAY);
+    assertThat(articles.get(0).getIssueDate()).isEqualTo(YESTERDAY);
+    assertThat(articles.get(1).getIssueDate()).isEqualTo(YESTERDAY);
   }
 
   @DirtyTest
@@ -126,7 +123,7 @@ class ArticleSearchTest {
     List<ArticlePreview> articles = articleService.find("vx");
     assertThat(articles).hasSize(1);
     assertThat(articles.get(0))
-        .returns(Dates.YESTERDAY, ArticlePreview::getIssueDate)
+        .returns(YESTERDAY, ArticlePreview::getIssueDate)
         .returns("Second Title", ArticlePreview::getTitle);
   }
 

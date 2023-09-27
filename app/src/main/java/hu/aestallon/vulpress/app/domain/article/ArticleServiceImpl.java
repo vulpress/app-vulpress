@@ -8,11 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,7 +59,13 @@ public class ArticleServiceImpl implements ArticleService {
 
   @Override
   public List<ArticlePreview> find(String queryStr) {
-    return Collections.emptyList();
+    return Streamable
+        .of(userService.isCurrentUserAdmin()
+            ? articleRepository.textSearch(queryStr)
+            : articleRepository.textSearchPublic(queryStr))
+        .stream()
+        .map(Article::toPreview)
+        .toList();
   }
 
 }

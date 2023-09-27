@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -26,11 +25,10 @@ public class ViewTestConfig {
 
   private static final Logger log = LoggerFactory.getLogger(ViewTestConfig.class);
 
-  @Bean
-  @Primary
-  Clock testClock() {
-    log.info("Initialised test clock at {}.", TEST_INST.atZone(TEST_ZONE));
-    return Clock.fixed(TEST_INST, TEST_ZONE);
-  }
+  // @Bean
+  // Clock clock() {
+  //   log.info("Initialised test clock at {}.", TEST_INST.atZone(TEST_ZONE));
+  //   return Clock.fixed(TEST_INST, TEST_ZONE);
+  // }
 
 }
