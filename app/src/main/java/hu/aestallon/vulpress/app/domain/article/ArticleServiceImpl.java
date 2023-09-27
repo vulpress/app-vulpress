@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -23,6 +24,7 @@ public class ArticleServiceImpl implements ArticleService {
 
   private final ArticleRepository articleRepository;
   private final UserService       userService;
+  private final Clock             clock;
 
   @Override
   public ArticleDetail save(ArticleDetail articleDetail, long category, String description) {
@@ -37,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
             : articleDetail.getAuthor(),
         AggregateReference.to(category),
         description,
-        LocalDateTime.now(),
+        LocalDateTime.now(clock),
         (articleDetail.getIssueDate() == null)
             ? LocalDate.now()
             : articleDetail.getIssueDate(),

@@ -24,4 +24,7 @@ public interface ContentCategoryRepository extends CrudRepository<ContentCategor
   @Query("select c.* from content_category c where c.norm_title = 'sys_archive' limit 1")
   ContentCategory archive();
 
+  @Query("select c.* from content_category c where c.norm_title = 'articles' limit 1")
+  ContentCategory common();
+
 }

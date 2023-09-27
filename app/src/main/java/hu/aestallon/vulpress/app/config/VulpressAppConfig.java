@@ -10,11 +10,15 @@ import hu.aestallon.vulpress.docu.importer.DocumentImporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
+
+import java.time.Clock;
+import java.time.ZoneId;
 
 @Configuration
 public class VulpressAppConfig {
@@ -40,6 +44,13 @@ public class VulpressAppConfig {
   @Bean
   DocumentImporter wordDocumentImporter() {
     return documentComposer().provideImporter(DocumentFormat.DOCX);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  Clock clock() {
+    log.info("VULPRESS - Initialised central clock for UTC!");
+    return Clock.systemUTC();
   }
 
 }

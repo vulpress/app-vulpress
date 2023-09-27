@@ -22,6 +22,7 @@ import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +39,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
   private final ArticleRepository         articleRepository;
   private final ContentCategoryRepository contentCategoryRepository;
   private final DocumentImporter          wordDocumentImporter;
+  private final Clock                     clock;
 
   @Override
   public Stream<Category> getCategories() {
@@ -76,7 +78,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 
     ContentCategory entity = new ContentCategory(title, normalisedTitle,
         category.getDescription(), false, true, null,
-        LocalDateTime.now());
+        LocalDateTime.now(clock));
     entity = contentCategoryRepository.save(entity);
     return dto(entity);
   }
