@@ -65,8 +65,8 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
       right join paragraph p on p.article = a.id
       join content_category c on c.id = a.content_category
       where
-        (c.public_vis is true and a.issue_date < current_date)
-      and 
+        (c.public_vis is true and a.issue_date <= current_date)
+      and
         ((lower(a.title) like lower('%' || :s || '%'))
           or (lower(p.content) like lower('%' || :s || '%')))
       order by a.issue_date desc""")
