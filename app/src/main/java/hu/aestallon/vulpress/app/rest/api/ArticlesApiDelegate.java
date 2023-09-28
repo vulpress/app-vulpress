@@ -3,6 +3,7 @@ package hu.aestallon.vulpress.app.rest.api;
 import hu.aestallon.vulpress.app.rest.model.ApiError;
 import hu.aestallon.vulpress.app.rest.model.ArticleDetail;
 import hu.aestallon.vulpress.app.rest.model.ArticleMoveRequest;
+import hu.aestallon.vulpress.app.rest.model.ArticlePreview;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,28 @@ public interface ArticlesApiDelegate {
      * @see ArticlesApi#deleteArticle
      */
     default ResponseEntity<Void> deleteArticle(String article) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /articles : Searches articles
+     * Finds articles matching the filter criteria provided as query parameters. 
+     *
+     * @param contains  (required)
+     * @return Ok (status code 200)
+     * @see ArticlesApi#findArticles
+     */
+    default ResponseEntity<List<ArticlePreview>> findArticles(String contains) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"thumbnail\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"code\" : \"code\", \"author\" : \"author\", \"description\" : \"description\", \"title\" : \"title\", \"issueDate\" : \"2000-01-23\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

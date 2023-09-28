@@ -3,6 +3,7 @@ package hu.aestallon.vulpress.app.rest.api;
 import hu.aestallon.vulpress.app.rest.model.ApiError;
 import hu.aestallon.vulpress.app.rest.model.ArticleDetail;
 import hu.aestallon.vulpress.app.rest.model.ArticleMoveRequest;
+import hu.aestallon.vulpress.app.rest.model.ArticlePreview;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

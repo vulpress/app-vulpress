@@ -8,6 +8,7 @@ package hu.aestallon.vulpress.app.rest.api;
 import hu.aestallon.vulpress.app.rest.model.ApiError;
 import hu.aestallon.vulpress.app.rest.model.ArticleDetail;
 import hu.aestallon.vulpress.app.rest.model.ArticleMoveRequest;
+import hu.aestallon.vulpress.app.rest.model.ArticlePreview;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -67,6 +68,35 @@ public interface ArticlesApi {
         @Parameter(name = "article", description = "", required = true) @PathVariable("article") String article
     ) {
         return getDelegate().deleteArticle(article);
+    }
+
+
+    /**
+     * GET /articles : Searches articles
+     * Finds articles matching the filter criteria provided as query parameters. 
+     *
+     * @param contains  (required)
+     * @return Ok (status code 200)
+     */
+    @Operation(
+        operationId = "findArticles",
+        summary = "Searches articles",
+        tags = { "Article" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Ok", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ArticlePreview.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/articles",
+        produces = { "application/json" }
+    )
+    default ResponseEntity<List<ArticlePreview>> findArticles(
+        @NotNull @Parameter(name = "contains", description = "", required = true) @Valid @RequestParam(value = "contains", required = true) String contains
+    ) {
+        return getDelegate().findArticles(contains);
     }
 
 
