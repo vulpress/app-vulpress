@@ -510,6 +510,8 @@ components:
           description: |
             The unique identifier of the image to be as thumbnail for
             the article.
+        path:
+          type: string
       required: [ id, title, description ]
 
     ArticleDetail:

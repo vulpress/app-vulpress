@@ -3,6 +3,7 @@ import LoginDialog from '@/components/LoginDialog.vue';
 import RegistrationDialog from '@/components/RegistrationDialog.vue';
 import { articleService, authService } from '@/services';
 import { useAppStore } from '@/store/app';
+import { useSearchStore } from '@/store/search';
 import { storeToRefs } from 'pinia';
 import { Ref } from 'vue';
 import { computed, ref } from 'vue';
@@ -35,6 +36,7 @@ const userLoginActions: LoginAction[] = [
 ];
 
 const app = useAppStore();
+const search = useSearchStore();
 const router = useRouter();
 const { appBarModel } = storeToRefs(app);
 app.appBarModelChanged();
@@ -81,8 +83,7 @@ const queryStr: Ref<string> = ref<string>('');
 const showQuery: Ref<boolean> = ref<boolean>(false);
 
 async function doSearch() {
-  const result = await articleService.findArticles(queryStr.value);
-  console.log(result);
+  search.search(queryStr.value);
 }
 </script>
 

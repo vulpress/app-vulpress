@@ -1,6 +1,8 @@
 package hu.aestallon.vulpress.app.domain.article;
 
 import hu.aestallon.vulpress.app.auth.UserService;
+import hu.aestallon.vulpress.app.domain.category.ContentCategory;
+import hu.aestallon.vulpress.app.domain.category.ContentCategoryRepository;
 import hu.aestallon.vulpress.app.domain.util.StringNormaliser;
 import hu.aestallon.vulpress.app.rest.model.ArticleDetail;
 import hu.aestallon.vulpress.app.rest.model.ArticlePreview;
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +28,10 @@ public class ArticleServiceImpl implements ArticleService {
 
   private static final Logger log = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
-  private final ArticleRepository articleRepository;
-  private final UserService       userService;
-  private final Clock             clock;
+  private final ArticleRepository         articleRepository;
+  private final ContentCategoryRepository contentCategoryRepository;
+  private final UserService               userService;
+  private final Clock                     clock;
 
   @Override
   public ArticleDetail save(ArticleDetail articleDetail, long category, String description) {
@@ -59,12 +64,24 @@ public class ArticleServiceImpl implements ArticleService {
 
   @Override
   public List<ArticlePreview> find(String queryStr) {
-    return Streamable
+    final var result = Streamable
         .of(userService.isCurrentUserAdmin()
             ? articleRepository.textSearch(queryStr)
             : articleRepository.textSearchPublic(queryStr))
         .stream()
-        .map(Article::toPreview)
+        .toList();
+    if (result.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    final var categoriesById = Streamable
+        .of(contentCategoryRepository.findAll())
+        .stream()
+        .collect(Collectors.toMap(ContentCategory::id, ContentCategory::normalisedTitle));
+    return result.stream()
+        .map(a -> a.toPreview().path(
+            "/" + categoriesById.get(a.contentCategory().getId())
+            + "/" + a.normalisedTitle()))
         .toList();
   }
 

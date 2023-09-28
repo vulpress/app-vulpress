@@ -177,6 +177,12 @@ export interface ArticlePreview {
      * @memberof ArticlePreview
      */
     'thumbnail'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ArticlePreview
+     */
+    'path'?: string;
 }
 /**
  * 
