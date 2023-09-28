@@ -407,6 +407,43 @@ export const ArticleApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Finds articles matching the filter criteria provided as query parameters. 
+         * @summary Searches articles
+         * @param {string} contains 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findArticles: async (contains: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contains' is not null or undefined
+            assertParamExists('findArticles', 'contains', contains)
+            const localVarPath = `/articles`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (contains !== undefined) {
+                localVarQueryParameter['contains'] = contains;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * ... 
          * @summary Load the contents of an article
          * @param {string} article 
@@ -693,6 +730,17 @@ export const ArticleApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Finds articles matching the filter criteria provided as query parameters. 
+         * @summary Searches articles
+         * @param {string} contains 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async findArticles(contains: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ArticlePreview>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findArticles(contains, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * ... 
          * @summary Load the contents of an article
          * @param {string} article 
@@ -804,6 +852,16 @@ export const ArticleApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.deleteCategory(category, options).then((request) => request(axios, basePath));
         },
         /**
+         * Finds articles matching the filter criteria provided as query parameters. 
+         * @summary Searches articles
+         * @param {string} contains 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findArticles(contains: string, options?: any): AxiosPromise<Array<ArticlePreview>> {
+            return localVarFp.findArticles(contains, options).then((request) => request(axios, basePath));
+        },
+        /**
          * ... 
          * @summary Load the contents of an article
          * @param {string} article 
@@ -912,6 +970,18 @@ export class ArticleApi extends BaseAPI {
      */
     public deleteCategory(category: string, options?: AxiosRequestConfig) {
         return ArticleApiFp(this.configuration).deleteCategory(category, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Finds articles matching the filter criteria provided as query parameters. 
+     * @summary Searches articles
+     * @param {string} contains 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleApi
+     */
+    public findArticles(contains: string, options?: AxiosRequestConfig) {
+        return ArticleApiFp(this.configuration).findArticles(contains, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

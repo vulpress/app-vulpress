@@ -36,6 +36,7 @@ onMounted(async () => {
   a.value = (await app.getArticle(props.category, props.article))!;
   refreshActions();
 });
+app.setCurrentCategory(props.category);
 
 async function refreshActions() {
   actions.value = await viewService.actions(ViewName.ARTICLE);
