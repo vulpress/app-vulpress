@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import LoginDialog from '@/components/LoginDialog.vue';
 import RegistrationDialog from '@/components/RegistrationDialog.vue';
-import { authService } from '@/services';
+import { articleService, authService } from '@/services';
 import { useAppStore } from '@/store/app';
+import { useSearchStore } from '@/store/search';
 import { storeToRefs } from 'pinia';
+import { Ref } from 'vue';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -34,6 +36,7 @@ const userLoginActions: LoginAction[] = [
 ];
 
 const app = useAppStore();
+const search = useSearchStore();
 const router = useRouter();
 const { appBarModel } = storeToRefs(app);
 app.appBarModelChanged();
@@ -73,6 +76,15 @@ function onLoginClosed() {
 }
 
 const showRegisterDialog = ref<boolean>(false);
+
+// --------------------------------------------------
+// Search Stuff
+const queryStr: Ref<string> = ref<string>('');
+const showQuery: Ref<boolean> = ref<boolean>(false);
+
+async function doSearch() {
+  search.search(queryStr.value);
+}
 </script>
 
 <template>
@@ -80,8 +92,22 @@ const showRegisterDialog = ref<boolean>(false);
     <v-app-bar-title class="navbar-title" @click="onTitleClicked">{{
       appBarModel?.appName
     }}</v-app-bar-title>
-    <v-btn icon="mdi-magnify"></v-btn>
-    <v-btn>
+
+    <Transition>
+      <v-text-field
+        class="query-field"
+        v-if="showQuery"
+        single-line
+        hide-details
+        v-model="queryStr"
+        variant="outlined"
+        density="compact"
+        append-inner-icon="mdi-arrow-right"
+        @click:append-inner="doSearch"
+      ></v-text-field>
+    </Transition>
+    <v-btn icon="mdi-magnify" @click="showQuery = !showQuery"></v-btn>
+    <v-btn icon>
       <v-icon>{{
         appBarModel?.loggedIn ? 'mdi-account-circle' : 'mdi-account-circle-outline'
       }}</v-icon>
@@ -151,5 +177,30 @@ const showRegisterDialog = ref<boolean>(false);
   color: var(--gr-primary);
   font-size: 1rem;
   font-weight: 700;
+}
+
+.query-field {
+  max-width: 30rem;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.4s ease-in-out;
+  transform-origin: right;
+}
+
+.v-enter-from {
+  transform: scaleX(0);
+}
+.v-enter-to {
+  transform: scaleX(1);
+}
+
+.v-leave-from {
+  transform: scaleX(1);
+  transform-origin: right;
+}
+.v-leave-to {
+  transform: scaleX(0);
 }
 </style>

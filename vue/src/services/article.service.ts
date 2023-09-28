@@ -78,4 +78,11 @@ export default class ArticleService {
       (reject) => false
     );
   }
+
+  async findArticles(queryStr: string): Promise<ArticlePreview[]> {
+    return this.articleApi.findArticles(queryStr).then(
+      (ok) => ok.data,
+      (err) => []
+    );
+  }
 }

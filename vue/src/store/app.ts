@@ -46,6 +46,23 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
+  async function setCurrentCategory(categoryCode: string) {
+    console.log('Set Current category: ', categoryCode);
+    if (currentCategory.value?.code === categoryCode) {
+      return;
+    }
+
+    if (categories.value.length === 0) {
+      categories.value = await articleService.categories();
+    }
+
+    currentCategory.value = categories.value.find((c) => c.code === categoryCode);
+    if (!currentCategory.value) {
+      toMain();
+      return;
+    }
+  }
+
   async function deleteCategory(category: string) {
     const res = await articleService.deleteCategory(category);
     if (res) {
@@ -144,6 +161,7 @@ export const useAppStore = defineStore('app', () => {
     deleteCategory,
     moveArticle,
     deleteArticle,
+    setCurrentCategory,
     // computed values:
   };
 });

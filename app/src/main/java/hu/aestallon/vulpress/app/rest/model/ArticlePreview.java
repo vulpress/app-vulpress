@@ -42,6 +42,9 @@ public class ArticlePreview {
   @JsonProperty("thumbnail")
   private java.util.UUID thumbnail;
 
+  @JsonProperty("path")
+  private String path;
+
   public ArticlePreview code(String code) {
     this.code = code;
     return this;
@@ -156,6 +159,25 @@ public class ArticlePreview {
     this.thumbnail = thumbnail;
   }
 
+  public ArticlePreview path(String path) {
+    this.path = path;
+    return this;
+  }
+
+  /**
+   * Get path
+   * @return path
+  */
+  
+  @Schema(name = "path", required = false)
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -170,12 +192,13 @@ public class ArticlePreview {
         Objects.equals(this.description, articlePreview.description) &&
         Objects.equals(this.issueDate, articlePreview.issueDate) &&
         Objects.equals(this.author, articlePreview.author) &&
-        Objects.equals(this.thumbnail, articlePreview.thumbnail);
+        Objects.equals(this.thumbnail, articlePreview.thumbnail) &&
+        Objects.equals(this.path, articlePreview.path);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, title, description, issueDate, author, thumbnail);
+    return Objects.hash(code, title, description, issueDate, author, thumbnail, path);
   }
 
   @Override
@@ -188,6 +211,7 @@ public class ArticlePreview {
     sb.append("    issueDate: ").append(toIndentedString(issueDate)).append("\n");
     sb.append("    author: ").append(toIndentedString(author)).append("\n");
     sb.append("    thumbnail: ").append(toIndentedString(thumbnail)).append("\n");
+    sb.append("    path: ").append(toIndentedString(path)).append("\n");
     sb.append("}");
     return sb.toString();
   }

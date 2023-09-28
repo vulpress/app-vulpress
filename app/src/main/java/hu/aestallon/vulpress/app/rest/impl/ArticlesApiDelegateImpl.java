@@ -1,18 +1,23 @@
 package hu.aestallon.vulpress.app.rest.impl;
 
+import hu.aestallon.vulpress.app.domain.article.ArticleService;
 import hu.aestallon.vulpress.app.domain.category.ContentCategoryService;
 import hu.aestallon.vulpress.app.rest.api.ArticlesApiDelegate;
 import hu.aestallon.vulpress.app.rest.model.ArticleDetail;
 import hu.aestallon.vulpress.app.rest.model.ArticleMoveRequest;
+import hu.aestallon.vulpress.app.rest.model.ArticlePreview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class ArticlesApiDelegateImpl implements ArticlesApiDelegate {
 
   private final ContentCategoryService contentCategoryService;
+  private final ArticleService         articleService;
 
   @Override
   public ResponseEntity<ArticleDetail> getArticle(String article) {
@@ -31,6 +36,11 @@ public class ArticlesApiDelegateImpl implements ArticlesApiDelegate {
         articleMoveRequest.getArticle(),
         articleMoveRequest.getTargetCategory());
     return ResponseEntity.ok().build();
+  }
+
+  @Override
+  public ResponseEntity<List<ArticlePreview>> findArticles(String contains) {
+    return ResponseEntity.ok(articleService.find(contains));
   }
 
 }

@@ -22,25 +22,24 @@ import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
-
 @Service
 @RequiredArgsConstructor
 public class ContentCategoryServiceImpl implements ContentCategoryService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ContentCategoryServiceImpl.class);
+  private static final Logger log = LoggerFactory.getLogger(ContentCategoryServiceImpl.class);
 
   private final UserService               userService;
   private final ArticleService            articleService;
   private final ArticleRepository         articleRepository;
   private final ContentCategoryRepository contentCategoryRepository;
   private final DocumentImporter          wordDocumentImporter;
+  private final Clock                     clock;
 
   @Override
   public Stream<Category> getCategories() {
@@ -79,7 +78,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 
     ContentCategory entity = new ContentCategory(title, normalisedTitle,
         category.getDescription(), false, true, null,
-        LocalDateTime.now());
+        LocalDateTime.now(clock));
     entity = contentCategoryRepository.save(entity);
     return dto(entity);
   }
