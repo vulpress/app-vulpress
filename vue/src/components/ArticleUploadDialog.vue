@@ -32,6 +32,8 @@ const titleRules = [
 const docu = ref();
 const fileRules = [(v: any) => (!!v && !!v.length) || 'Uploading a file is mandatory!'];
 
+const issueDate: Ref<string> = ref<string>(new Date().toISOString().slice(0, 10));
+
 const valid: Ref<boolean | null> = ref<boolean | null>(null);
 
 function onSubmitClicked() {
@@ -40,6 +42,7 @@ function onSubmitClicked() {
     title: title.value,
     content: docu.value[0],
     description: description.value,
+    issueDate: issueDate.value,
   });
 }
 </script>
@@ -47,7 +50,12 @@ function onSubmitClicked() {
 <template>
   <v-card class="dialog-card" rounded variant="elevated">
     <v-card-title class="dialog-title">Upload New Article</v-card-title>
-    <v-form class="dialog-form" fast-fail v-model="valid" @submit.prevent="onSubmitClicked">
+    <v-form
+      class="dialog-form half-gap"
+      fast-fail
+      v-model="valid"
+      @submit.prevent="onSubmitClicked"
+    >
       <v-select
         variant="outlined"
         v-model="selectedCategory"
@@ -79,6 +87,12 @@ function onSubmitClicked() {
         accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         :rules="fileRules"
       ></v-file-input>
+      <v-text-field
+        v-model="issueDate"
+        variant="outlined"
+        label="Issue Date"
+        type="date"
+      ></v-text-field>
       <div class="form-control-container">
         <v-btn class="form-button" color="secondary" @click="$emit('close')">Cancel</v-btn>
         <v-btn class="form-button" color="primary" type="submit" :disabled="!valid">Upload</v-btn>
@@ -97,5 +111,9 @@ function onSubmitClicked() {
 
 .form-button {
   flex: 1;
+}
+
+.half-gap {
+  gap: 0.6125rem !important;
 }
 </style>
