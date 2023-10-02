@@ -14,9 +14,12 @@ import java.util.stream.Stream;
 
 public interface ContentCategoryService {
 
+  /** Category with admin-only visibility. */
   String SANDBOX  = "sys_sandbox";
+  /** Category for accumulating deleted articles. */
   String ARCHIVE  = "sys_archive";
   String HOMILIES = "homilies";
+  /** The default publicly visible category. */
   String ARTICLES = "articles";
 
   Set<String> BUILT_IN_CATEGORIES = Set.of(SANDBOX, ARCHIVE, HOMILIES, ARTICLES);

@@ -23,7 +23,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -116,10 +118,15 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
     if (!isCategoryPermitted(categoryCode)) {
       throw new ForbiddenOperationException("Cannot show contents of category: " + categoryCode);
     }
+    final boolean currentUserAdmin = userService.isCurrentUserAdmin();
 
     return Streamable
         .of(articleRepository.findArticlesOfCategory(categoryCode)).stream()
         .map(Article::toPreview)
+        .sorted(Comparator
+            .comparing(ArticlePreview::getIssueDate).reversed()
+            .thenComparing(ArticlePreview::getTitle))
+        .filter(a -> currentUserAdmin || !a.getIssueDate().isAfter(LocalDate.now(clock)))
         .toList();
   }
 
@@ -163,6 +170,9 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
     final Article article = articleRepository
         .findByNormalisedTitle(Objects.requireNonNull(articleCode))
         .orElseThrow(() -> new IllegalArgumentException(articleCode + " is unknown!"));
+    if (article.contentCategory().getId() == null) {
+      throw new ConstraintViolationException(articleCode + " is not associated with any category!");
+    }
 
     final boolean categoryUnavailable = contentCategoryRepository
         .findById(article.contentCategory().getId())
@@ -170,6 +180,10 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
         .isEmpty();
     if (categoryUnavailable) {
       throw new ForbiddenOperationException(articleCode + " is not in an available category!");
+    }
+    if (!userService.isCurrentUserAdmin() && article.issueDate().isAfter(LocalDate.now(clock))) {
+      throw new ForbiddenOperationException(
+          articleCode + " is not yet published and cannot be viewed by non-admins!");
     }
 
     return article.toDetail();
