@@ -7,6 +7,7 @@ import hu.aestallon.vulpress.app.domain.article.Article;
 import hu.aestallon.vulpress.app.domain.article.ArticleRepository;
 import hu.aestallon.vulpress.app.domain.article.ArticleService;
 import hu.aestallon.vulpress.app.domain.util.StringNormaliser;
+import hu.aestallon.vulpress.app.event.ArticlePublished;
 import hu.aestallon.vulpress.app.rest.model.ArticleDetail;
 import hu.aestallon.vulpress.app.rest.model.ArticlePreview;
 import hu.aestallon.vulpress.app.rest.model.Category;
@@ -18,6 +19,7 @@ import hu.aestallon.vulpress.docu.model.Text;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 
   private static final Logger log = LoggerFactory.getLogger(ContentCategoryServiceImpl.class);
 
+  private final ApplicationEventPublisher eventPublisher;
   private final UserService               userService;
   private final ArticleService            articleService;
   private final ArticleRepository         articleRepository;
@@ -138,9 +141,8 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
       throw new ForbiddenOperationException("non admins cannot upload!");
     }
 
-    final Long categoryId = contentCategoryRepository
+    final ContentCategory category = contentCategoryRepository
         .findByNormalisedTitle(categoryCode)
-        .map(ContentCategory::id)
         .orElseThrow(() -> new ConstraintViolationException(
             "no category known with [ " + categoryCode + " ] !!!"));
 
@@ -148,7 +150,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
     if (result instanceof DocumentImportResult.Ok ok) {
       return articleService.save(
           fromDocument(ok.document(), articleDetail),
-          categoryId,
+          category,
           description);
 
     } else if (result instanceof DocumentImportResult.Err err) {
@@ -239,7 +241,15 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
     final ContentCategory target = contentCategoryRepository
         .findByNormalisedTitle(targetCategory)
         .orElseThrow(() -> new ConstraintViolationException(
-            "[%s] category does not exist!".formatted(targetCategory)));
+            "[ %s ] category does not exist!".formatted(targetCategory)));
     articleRepository.moveArticle(articleCode, target.id());
+    if (target.publiclyVisible() && !articleRepository.isPublished(articleCode)) {
+      articleRepository.publishByNormalisedTitle(articleCode);
+      articleRepository
+          .findByNormalisedTitle(articleCode)
+          .ifPresent(a -> eventPublisher.publishEvent(new ArticlePublished(
+              a,
+              userService.currentUser())));
+    }
   }
 }

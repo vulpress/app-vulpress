@@ -73,4 +73,14 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
   Iterable<Article> textSearchPublic(@Param("s") String s);
 
 
+  @Query(
+      """
+      select a.published from article a
+      where a.norm_title = :norm_title
+      limit 1""")
+  boolean isPublished(@Param("norm_title") String normalisedTitle);
+
+  @Modifying
+  @Query("update article a set a.published = true where a.norm_title = :norm_title")
+  void publishByNormalisedTitle(@Param("norm_title") String normalisedTitle);
 }

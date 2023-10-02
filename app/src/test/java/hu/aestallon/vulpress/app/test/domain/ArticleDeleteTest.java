@@ -34,10 +34,10 @@ class ArticleDeleteTest {
         .title(categoryTitle)
         .description("None"));
 
-    final long c1 =
+    final var c1 =
         contentCategoryRepository
             .findByNormalisedTitle(StringNormaliser.normalise(categoryTitle))
-            .get().id();
+            .get();
 
     final ArticleDetail a = articleService.save(
         new ArticleDetail().title(articleTitle).addParagraphsItem(new Paragraph().text("None")), c1,
