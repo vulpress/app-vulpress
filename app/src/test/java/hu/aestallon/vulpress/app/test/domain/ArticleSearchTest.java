@@ -77,8 +77,8 @@ class ArticleSearchTest {
 
   @BeforeEach
   void beforeEach() {
-    final long publicCategoryId = contentCategoryRepository.common().id();
-    TEST_ARTICLES.forEach(a -> articleService.save(a, publicCategoryId, "description"));
+    final var commonCategory = contentCategoryRepository.common();
+    TEST_ARTICLES.forEach(a -> articleService.save(a, commonCategory, "description"));
   }
 
   @DirtyTest
@@ -166,7 +166,7 @@ class ArticleSearchTest {
     final ContentCategory sandbox = contentCategoryRepository
         .findByNormalisedTitle("sys_sandbox")
         .orElseThrow();
-    articleService.save(article, sandbox.id(), "Custom description");
+    articleService.save(article, sandbox, "Custom description");
 
     List<ArticlePreview> articles = articleService.find("ivx");
     assertThat(articles).hasSize(2);

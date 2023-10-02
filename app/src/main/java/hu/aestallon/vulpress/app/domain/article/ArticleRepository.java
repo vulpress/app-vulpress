@@ -22,6 +22,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -73,4 +74,26 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
   Iterable<Article> textSearchPublic(@Param("s") String s);
 
 
+  @Query(
+      """
+      select a.published from article a
+      where a.norm_title = :norm_title
+      limit 1""")
+  boolean isPublished(@Param("norm_title") String normalisedTitle);
+
+  @Modifying
+  @Query("update article a set a.published = true where a.norm_title = :norm_title")
+  void publishByNormalisedTitle(@Param("norm_title") String normalisedTitle);
+
+  @Query(
+      """
+      select a.* from article a
+      join content_category c on a.content_category = c.id
+      where
+      a.published is false
+      and
+      a.issue_date is current_date
+      and
+      c.public_vis is true""")
+  List<Article> findArticlesToPublish();
 }

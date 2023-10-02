@@ -39,6 +39,7 @@ create table if not exists article
     description      text         not null       default '',           -- short description usable for previews
     created_at       timestamp without time zone default now(),
     issue_date       date                        default current_date, -- if the article is relevant for a specific date (e.g. a Christmas speech) this denotes that date,
+    published        boolean                     default false,
     image            uuid,                                             -- the UUID of the cover image
     content_category integer      not null       default 0
 );

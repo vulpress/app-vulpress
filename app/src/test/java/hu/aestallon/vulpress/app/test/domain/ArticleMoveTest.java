@@ -48,18 +48,17 @@ class ArticleMoveTest {
     assertThat(contentCategory)
         .returns(true, ContentCategory::publiclyVisible)
         .returns(false, ContentCategory::builtIn);
-    final long categoryId = contentCategory.id();
     ArticleDetail a1 = articleService.save(
         new ArticleDetail()
             .title("Test article 1")
             .addParagraphsItem(new Paragraph().text("some text")),
-        categoryId,
+        contentCategory,
         "Some description");
     ArticleDetail a2 = articleService.save(
         new ArticleDetail()
             .title("Test article 2")
             .addParagraphsItem(new Paragraph().text("some text")),
-        categoryId,
+        contentCategory,
         "Some description");
 
     var sandBoxArticles = contentCategoryService.articlesOf(categoryCode);
@@ -112,7 +111,7 @@ class ArticleMoveTest {
         new ArticleDetail()
             .title("Test article 1")
             .addParagraphsItem(new Paragraph().text("some text")),
-        categoryId,
+        contentCategory,
         "Some description");
     assertThat(contentCategoryService.articlesOf(categoryCode)).hasSize(1);
 
@@ -199,9 +198,9 @@ class ArticleMoveTest {
         .title("Example Category 2")
         .description("None"));
 
-    final long c1 = contentCategoryRepository
+    final var c1 = contentCategoryRepository
         .findByNormalisedTitle("example-category-1")
-        .get().id();
+        .get();
     final long c2 = contentCategoryRepository
         .findByNormalisedTitle("example-category-2")
         .get().id();

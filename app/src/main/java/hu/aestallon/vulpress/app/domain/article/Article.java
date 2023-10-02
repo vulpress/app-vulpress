@@ -44,14 +44,15 @@ public record Article(
     @Column("description") String description,
     @Column("created_at") LocalDateTime createdAt,
     @Column("issue_date") LocalDate issueDate,
+    @Column("published") boolean published,
     List<Paragraph> paragraphs,
     Set<ArticleTag> tags) {
   public Article(String normalisedTitle, String title, AggregateReference<User, Long> author,
                  String authorName, AggregateReference<ContentCategory, Long> contentCategory,
                  String description, LocalDateTime createdAt, LocalDate issueDate,
-                 List<Paragraph> paragraphs, Set<ArticleTag> tags) {
+                 boolean published, List<Paragraph> paragraphs, Set<ArticleTag> tags) {
     this(null, normalisedTitle, title, author, authorName, contentCategory, description, createdAt,
-        issueDate, paragraphs, tags);
+        issueDate, published, paragraphs, tags);
   }
 
   public enum ParagraphType {
