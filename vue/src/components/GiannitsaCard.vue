@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface vulpressCardProps {
   title: string;
   text: string;
@@ -7,10 +9,13 @@ interface vulpressCardProps {
 }
 
 const props = defineProps<vulpressCardProps>();
+const isPublished = computed<boolean>(
+  () => !props.issueDate || Date.parse(props.issueDate) <= Date.now()
+);
 </script>
 
 <template>
-  <v-card class="my-card">
+  <v-card :class="isPublished ? 'my-card primary-shadow' : 'my-card gold-shadow'">
     <v-card-title class="my-card-title">{{ props.title }}</v-card-title>
     <v-card-text class="my-card-text">{{ props.text }}</v-card-text>
     <div v-if="props.issueDate || props.author" class="my-card-meta">
@@ -31,8 +36,16 @@ const props = defineProps<vulpressCardProps>();
 
   background-color: unset;
   border-radius: 6px;
+}
+
+.primary-shadow {
   border: 1px solid var(--gr-primary);
   box-shadow: 2px 4px 4px 0px var(--gr-primary);
+}
+
+.gold-shadow {
+  border: 1px solid var(--gr-gold);
+  box-shadow: 2px 4px 4px 0px var(--gr-gold);
 }
 
 .my-card-title {
