@@ -1,5 +1,5 @@
 drop
-all objects;
+    all objects;
 
 drop table if exists account_user;
 create table if not exists account_user
@@ -89,3 +89,20 @@ values ('sys_archive', 'Archive', 'Category for deleted elements', true, false),
        ('sys_sandbox', 'Sandbox', 'Category for not yet published elements', true, false),
        ('homilies', 'Homilies', 'Category for homilies', true, true),
        ('articles', 'Articles', 'Category for generic articles', true, true);
+
+
+create table if not exists tag_entry
+(
+    tag_name varchar(255) not null primary key
+);
+
+create table if not exists tag_alias
+(
+    id         serial       not null primary key,
+    tag_entry  varchar(255) not null,
+    tag_value  text         not null default '',
+    is_primary boolean      not null default false
+);
+alter table tag_alias
+    add constraint fk_alias_tag
+        foreign key (tag_entry) references tag_entry (tag_name);
